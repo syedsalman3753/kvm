@@ -50,6 +50,14 @@ Complete !!!
 Complete !!!
 ```
 
+```
+[mosipuser@k8Master1 ~]$ sudo yum install virt-top libguestfs-tools libosinfo-bin  qemu-system virt-manager -y
+...
+...
+
+Complete !!!
+```
+
 ### Step 3: Restart libvirt
 
 ```
@@ -90,3 +98,10 @@ we also could launch/start it from terminal as well as from GUI.
 
                  
  ![virt-manager](../images/virt-manager.png)
+ 
+ 
+ 
+# References
+
+* [Techmint.com](https://www.tecmint.com/install-and-configure-kvm-in-linux/)
+* [github.com](https://github.com/adrowit/ekyc/blob/master/doc/infra/kvm.md)
