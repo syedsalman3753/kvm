@@ -7,7 +7,7 @@ Make sure that your system has the hardware virtualization extensions: For Intel
 ```
 [mosipuser@k8Master1 ~]$ grep -e 'vmx' /proc/cpuinfo
 ```
-![Screen](../images/check_cpu_virtualization.png)
+![Screen](../../images/check_cpu_virtualization.png)
 
 Make sure that Virtualization Technology (VT) is enabled in your server’s BIOS. 
 
@@ -15,7 +15,7 @@ Make sure that Virtualization Technology (VT) is enabled in your server’s BIOS
 [mosipuser@k8Master1 ~]$ lscpu | grep Virtualization
 ```
 
-![Screen](../images/check_virtualization_enable.png)
+![Screen](../../images/check_virtualization_enable.png)
 
 ### Step 1: Update the System
 
@@ -86,8 +86,18 @@ Complete !!!
            ├─19963 /usr/sbin/dnsmasq --conf-file=/var/lib/libvirt/dnsmasq/default.conf --leasefile-ro --dhcp-script=/usr/libexec/libvirt_le...
            └─19964 /usr/sbin/dnsmasq --conf-file=/var/lib/libvirt/dnsmasq/default.conf --leasefile-ro --dhcp-script=/usr/libexec/libvirt_le.
 ```
+### Step 6: check kvm installed
 
-### Step 6: virt-manager
+```
+[mosipuser@k8Master1 ~]$ virsh list --all
+
+ Id    Name                           State
+----------------------------------------------------
+
+```
+Right now there are no machines are there, therefore its empty.
+
+### Step 7: virt-manager
 
 virt-manager is a GUI based tool, Which helps to manage kvm machines 
 we also could launch/start it from terminal as well as from GUI.
@@ -97,7 +107,7 @@ we also could launch/start it from terminal as well as from GUI.
 ```
 
                  
- ![virt-manager](../images/virt-manager.png)
+ ![virt-manager](../../images/virt-manager.png)
  
  
  
