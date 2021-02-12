@@ -18,6 +18,9 @@ userCh(){
 
 #This function is to prompt wheather user is able to access sudo or not!!!!
 chkSudoer(){
+  if [[ $USER == "root" ]]; then
+  	return ;
+  fi 
   count=$( groups $USER | grep "sudo" | wc -l )
   if [[ $count -eq 0 ]]; then
     echo " $(tput setaf 1) User $USER does not has sudo access; EXITING $(tput sgr 0) "

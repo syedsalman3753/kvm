@@ -105,10 +105,8 @@ we also could launch/start it from terminal as well as from GUI.
 ```
 [mosipuser@k8Master1 ~]$ virt-manager
 ```
-
                  
  ![virt-manager](../../images/virt-manager.png)
- 
  
  
 # References
