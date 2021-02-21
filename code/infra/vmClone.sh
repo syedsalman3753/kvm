@@ -3,13 +3,14 @@
 set +x
 set -e
 
-destVm=$1
-srcVm=$2
 
 if [ "$#" -ne 2 ]; then
 	echo "Destination and Source VM names (exactly TWO params, in that order) must be provided"
 	exit 1
 fi
+
+destVm=$1
+srcVm=$2
 
 read -p "Are you sure you want to clone $destVm from $srcVm? " -n 1 -r
 echo    # (optional) move to a new line
@@ -30,4 +31,3 @@ sudo virt-sysprep -d $destVm \
 	
 virsh desc $destVm Cloned from $srcVm
 virsh desc $destVm --title $destVm 
-

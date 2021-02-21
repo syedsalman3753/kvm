@@ -5,20 +5,20 @@
 * Install git on your local machine
 
 ```
-$ sudo yum install git -y
+[host@machine ~]$  sudo yum install git -y
 ```
 
 * Goto kvm repository [link](https://github.com/123iris/kvm.git) 
 
 ```
-$ cd ~
-$ git clone https://github.com/123iris/kvm.git
+[host@machine ~]$  cd ~
+[host@machine ~]$  git clone https://github.com/123iris/kvm.git
 ```
 
 ## 2. Goto infra directory
 
 ```
-$ cd ~/kvm/code/infra/
+[host@machine ~]$  cd ~/kvm/code/infra/
 ```
 
 ## 3. Check createVmCentos7.sh file
@@ -26,7 +26,7 @@ $ cd ~/kvm/code/infra/
 * This script will help you to create new centos7 OS virtual machine in KVM
 
 ```
-$ ls ~/kvm/code/infra/
+[host@machine ~]$  ls ~/kvm/code/infra/
 createVmCentos7.sh
 ```
 
@@ -35,7 +35,7 @@ createVmCentos7.sh
 * Run createVmCentos7.sh script to install a new VM in your local machine
 
 ```
-$ sudo bash createVmCentos7.sh centos7Base 2048 1 8
+[host@machine ~]$  sudo bash createVmCentos7.sh centos7Base 2048 1 8
  
  USAGE: bash createCentos7Vm.sh vmName vmRAM(MiB) vCPU vmDiskSize(GiB) 
 
@@ -653,7 +653,7 @@ This is followed from [here](https://computingforgeeks.com/use-virt-manager-as-n
 * List all vm's 
 
 ```
-$ sudo virsh list --all   
+[host@machine ~]$ sudo virsh list --all   
  Id    Name                           State
 ----------------------------------------------------
  2     centos7Base                    running
@@ -663,7 +663,7 @@ $ sudo virsh list --all
 * List running vm's
 
 ```
-$ sudo virsh list 
+[host@machine ~]$ sudo virsh list 
  Id    Name                           State
 ----------------------------------------------------
  2     centos7Base                    running
@@ -677,7 +677,7 @@ $ sudo virsh list
 * Check if this is working
 
 ```
-[mosipuser@console ~]$  virsh -c qemu:///system list --all
+[host@machine ~]$ virsh -c qemu:///system list --all
  Id    Name                           State
 ----------------------------------------------------
  -     centos7Base                    shut off
@@ -687,39 +687,39 @@ $ sudo virsh list
 * Check whether libvirt group is present or not. If not Create one.
 
 ```
-[mosipuser@console ~]$ sudo getent group | grep libvirt
+[host@machine ~]$ sudo getent group | grep libvirt
 libvirt:x:991:
 ```
 * If above didn't work. Some Distribution uses libvirtd. Try this if above didn't work.
 
 ```
-[mosipuser@console ~]$ sudo getent group | grep libvirtd
+[host@machine ~]$ sudo getent group | grep libvirtd
 ```
 
 * If these is no libvirt group. Create one using the following command
 
 ```
-[mosipuser@console ~]$ sudo groupadd --system libvirt
+[host@machine ~]$ sudo groupadd --system libvirt
 groupadd: group 'libvirt' already exists
 ```
 
 * Now Add user account to the libvirt group
 
 ```
-sudo usermod -a -G libvirt userName
+[host@machine ~]$ sudo usermod -a -G libvirt userName
 
-sudo usermod -a -G libvirt mosipuser
-sudo usermod -a -G libvirt $(whoami)     # add for current user
+[host@machine ~]$ sudo usermod -a -G libvirt mosipuser
+[host@machine ~]$ sudo usermod -a -G libvirt $(whoami)     # add for current user
 ```
 
 * Check libvirt group is added to the user
 
 ```
-[mosipuser@console ~]$ id $(whoami)       # for current user
+[host@machine ~]$ id $(whoami)       # for current user
 uid=1000(mosipuser) gid=1000(mosipuser) groups=1000(mosipuser),991(libvirt)
 ```
 ```
-[mosipuser@console ~]$ id mosipuser
+[host@machine ~]$ id mosipuser
 uid=1000(mosipuser) gid=1000(mosipuser) groups=1000(mosipuser),991(libvirt)
 ```
 
@@ -729,14 +729,14 @@ uid=1000(mosipuser) gid=1000(mosipuser) groups=1000(mosipuser),991(libvirt)
 * Start a virtual machine using virsh command
 
 ```
-$ virsh start centos7Base
+[host@machine ~]$  virsh start centos7Base
 Domain centos7Base started
 ```
 
 * Enter into centos7Base machine
 
 ```
-$ sudo virsh console centos7Base
+[host@machine ~]$  sudo virsh console centos7Base
 Connected to domain centos7Base
 Escape character is ^]
 
@@ -772,7 +772,7 @@ localhost login:
 * To shutdown vm
 
 ```
-$ sudo virsh shutdown centos7Base
+[host@machine ~]$  sudo virsh shutdown centos7Base
 Domain centos7Base is being shutdown
 ```
 
@@ -781,13 +781,13 @@ Domain centos7Base is being shutdown
 * To set hostname shutdown vm first
 
 ```
-[mosipuser@techguru ~]$ sudo virsh shutdown centos7Base
+[host@machine ~]$ sudo virsh shutdown centos7Base
 Domain centos7Base is being shutdown
 ```
 * Notice that hostname is not set. Use the command below to set it
 
 ```
-[mosipuser@techguru ~]$  sudo virt-customize -d centos7Base --hostname centos7Base
+[host@machine ~]$  sudo virt-customize -d centos7Base --hostname centos7Base
 [   0.0] Examining the guest ...
 [  18.6] Setting a random seed
 [  18.6] Setting the hostname: centos7Base
@@ -797,10 +797,10 @@ Domain centos7Base is being shutdown
 * Now check hostname  
 
 ```
-[mosipuser@techguru ~]$ sudo virsh start centos7Base
+[host@machine ~]$ sudo virsh start centos7Base
 Domain centos7Base started
 
-[mosipuser@techguru ~]$ sudo virsh console centos7Base
+[host@machine ~]$ sudo virsh console centos7Base
 Connected to domain centos7Base
 Escape character is ^]
 
@@ -815,7 +815,7 @@ centos7Base login:                          # Hostname is change to centos7Base
 * Login to the machine & check IP address
 
 ```
-[mosipuser@techguru ~]$ sudo virsh console centos7Base
+[host@machine ~]$ sudo virsh console centos7Base
 Connected to domain centos7Base
 Escape character is ^]
 
@@ -846,7 +846,7 @@ password: mosipuser
 * Note down the IP address "192.168.124.248". Come out of the machine. try to login using ssh.
 
 ```
-[mosipuser@console ~]$ ssh -o StrictHostKeyChecking=no mosipuser@192.168.124.248
+[host@machine ~]$ ssh -o StrictHostKeyChecking=no mosipuser@192.168.124.248
 Warning: Permanently added '192.168.124.248' (ECDSA) to the list of known hosts.
 mosipuser@192.168.124.248's password: 
 
@@ -857,7 +857,7 @@ Last login: Sat Feb 20 15:07:00 2021
 * Check IP address using virsh command
 
 ```
-[mosipuser@console ~]$ sudo virsh net-dhcp-leases default 
+[host@machine ~]$ sudo virsh net-dhcp-leases default 
  Expiry Time          MAC address        Protocol  IP address                Hostname        Client ID or DUID
 -------------------------------------------------------------------------------------------------------------------
  2021-02-20 16:05:04  52:54:00:4d:81:14  ipv4      192.168.124.248/24        centos7Base     -
@@ -866,11 +866,171 @@ Last login: Sat Feb 20 15:07:00 2021
 
 * You may have noted that this IP Address is Dynamic IP address means this ip address may change in future. 
 
-  So we need to provide dynamic IP address to our vm's. 
+* So we need to provide static IP address to our vm's. Because we don't want our IP address to change
   
 
 ## Provide Static IP Address to vm's
 
+* First get "MAC address " of the vm's using the following command
+
+```
+[host@machine ~]$ virsh dumpxml centos7Base | grep mac
+
+    <type arch='x86_64' machine='pc-q35-4.2'>hvm</type>
+      <mac address='52:54:00:02:19:20'/>
+```
+
+* Copy the mac address
+
+* Add these mac addrsses to KVM default network.
+
+```
+[host@machine ~]$ virsh net-edit default 
+# Will bring up the editor
+# Add following lines in the dhcp section of the XML, like so:
+
+<network>
+  <name>default</name>
+  <uuid>90aae6fb-c6c4-415f-af9a-4a4b4c9f7145</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr0' stp='on' delay='0'/>
+  <mac address='52:54:00:4a:8b:c4'/>
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.254'/>
+      <host mac='52:54:00:02:19:20' name='centos7Base' ip='192.168.122.3'/>      # like this provide 
+    </dhcp>
+  </ip>
+</network>
+
+# save the file
+```
+* Paste the mac address & provide IP address under host tag.
+
+* Add the IP address to /etc/hosts file
+
+```
+[host@machine ~]$ sudo vim /etc/hosts
+
+127.0.0.1       localhost
+127.0.0.1       www.localhost
+127.0.1.1       machine
+192.168.122.3   centos7Base
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+```
+
+* Restart the virtual network for assignements to take effect:
+
+```
+[host@machine ~]$ virsh net-destroy default
+[host@machine ~]$ virsh net-start default
+```
+
+* Now verify whether you are able to access vms using IP address
+
+```
+[host@machine ~]$ virsh list --all
+
+ Id   Name           State
+-------------------------------
+ -    centos7Base    shut off
+```
+```
+[host@machine ~]$ virsh start centos7Base 
+Domain centos7Base started
+```
+
+* Now, you can see that IP address is what we have provided in virsh net-edit default
+
+```
+[host@machine ~]$ virsh net-dhcp-leases default 
+ Expiry Time           MAC address         Protocol   IP address         Hostname      Client ID or DUID
+----------------------------------------------------------------------------------------------------------
+ 2021-02-21 19:33:00   52:54:00:02:19:20   ipv4       192.168.122.3/24   centos7Base   -
+```
+
+* Now, try to enter into centos7Base machine using SSH 
+
+```
+[host@machine ~]$ ssh mosipuser@centos7Base 
+
+The authenticity of host 'centos7base (192.168.122.3)' can't be established.
+ECDSA key fingerprint is SHA256:Fq/TVnIUBroxmOiOsFH/dqGuiXb2sKvW3A0z5KjKejo.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'centos7base' (ECDSA) to the list of known hosts.
+[mosipuser@centos7Base ~]$ 
+```
+## Make centos7Base passwordLess access 
+
+* To make passwordLess access to any vm.
+* First we need get ssh public key ~/.ssh/ folder. 
+
+```
+[host@machine ~]$ cat ~/.ssh/id_rsa.pub 
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDOf2hLNYrz/Qp32uGVr+z8+zJ2z/dlFr/cTeTJ7irisD2/qA4tHO3VdiuJXx0kP475KMnpuGM6A8qaxhOJE3JIBzoxQ9/DaIutCerM6KsEdO1YTKdDEIqB90nxOGqCEIpiNhj9vlaZdGkkNNxOXqk7HsBSK/NQDDoUCAyhqdH1nCWTIg5nEWOH5CkXfjz5AymzaXCpCi9Ia8msJHa6b+mh12j/ikJj+R+JyEdcbc/+fAm9XBvl8J+p5sp0zT1cKWdZFsOSvlKzuW+HEfzlwQDtdDrzKId4RpdgbGnsVukDio5qjgcQnb5yWa9gHRLIEx7g3u8CiBjRSFl+m3bfsGxAHCpJy56s0KuXgLirczKfm5FQ2U0dgyuS190vu/y+o5hmJ2YIIiX4vK5tKh1QP7/tzeI/ZtT3OwyHr8wZ2qKT/WWCo+2VUBTbo+C5lJ+wTSzFHw/hQFZ/WRET8XxZDxWxReAv4kXZ8OFJC4OznATlf9u76ifFoydGNysCYpV3890= host@machine
+```
+
+* If not present, generate new ssh keys using the following command:
+
+```
+[host@machine ~]$ ssh-keygen -t rsa 
+```
+
+* Copy ssh public key from ~/.ssh/id_rsa.pub file
+
+```
+[host@machine ~]$ cat ~/.ssh/id_rsa.pub 
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDOf2hLNYrz/Qp32uGVr+z8+zJ2z/dlFr/cTeTJ7irisD2/qA4tHO3VdiuJXx0kP475KMnpuGM6A8qaxhOJE3JIBzoxQ9/DaIutCerM6KsEdO1YTKdDEIqB90nxOGqCEIpiNhj9vlaZdGkkNNxOXqk7HsBSK/NQDDoUCAyhqdH1nCWTIg5nEWOH5CkXfjz5AymzaXCpCi9Ia8msJHa6b+mh12j/ikJj+R+JyEdcbc/+fAm9XBvl8J+p5sp0zT1cKWdZFsOSvlKzuW+HEfzlwQDtdDrzKId4RpdgbGnsVukDio5qjgcQnb5yWa9gHRLIEx7g3u8CiBjRSFl+m3bfsGxAHCpJy56s0KuXgLirczKfm5FQ2U0dgyuS190vu/y+o5hmJ2YIIiX4vK5tKh1QP7/tzeI/ZtT3OwyHr8wZ2qKT/WWCo+2VUBTbo+C5lJ+wTSzFHw/hQFZ/WRET8XxZDxWxReAv4kXZ8OFJC4OznATlf9u76ifFoydGNysCYpV3890= host@machine
+```
+
+* Add ssh key to centos7Base machine
+
+```
+# start centos7Base machine
+[host@machine ~]$ virsh start centos7Base 
+Domain centos7Base started
+```
+```
+# copy ssh public key into a varibale 
+[host@machine ~]$ sshKey=$(< ~/.ssh/id_rsa.pub)
+[host@machine ~]$ echo $sshKey 
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDOf2hLNYrz/Qp32uGVr+z8+zJ2z/dlFr/cTeTJ7irisD2/qA4tHO3VdiuJXx0kP475KMnpuGM6A8qaxhOJE3JIBzoxQ9/DaIutCerM6KsEdO1YTKdDEIqB90nxOGqCEIpiNhj9vlaZdGkkNNxOXqk7HsBSK/NQDDoUCAyhqdH1nCWTIg5nEWOH5CkXfjz5AymzaXCpCi9Ia8msJHa6b+mh12j/ikJj+R+JyEdcbc/+fAm9XBvl8J+p5sp0zT1cKWdZFsOSvlKzuW+HEfzlwQDtdDrzKId4RpdgbGnsVukDio5qjgcQnb5yWa9gHRLIEx7g3u8CiBjRSFl+m3bfsGxAHCpJy56s0KuXgLirczKfm5FQ2U0dgyuS190vu/y+o5hmJ2YIIiX4vK5tKh1QP7/tzeI/ZtT3OwyHr8wZ2qKT/WWCo+2VUBTbo+C5lJ+wTSzFHw/hQFZ/WRET8XxZDxWxReAv4kXZ8OFJC4OznATlf9u76ifFoydGNysCYpV3890= host@machine
+```
+```
+# create authorized_keys file on centos7Base
+[host@machine ~]$ ssh mosipuser@centos7Base 'touch ~/.ssh/authorized_keys'
+
+# change authorized_keys file permission to 600
+[host@machine ~]$ ssh mosipuser@centos7Base 'chmod 600 ~/.ssh/authorized_keys'
+```
+```
+# now append host ssh key to centos7Base machine
+[host@machine ~]$ ssh mosipuser@centos7Base 'echo '$sshKey' >> ~/.ssh/authorized_keys'
+mosipuser@centos7base's password: 
+```
+**Simple Method: ssh-cop-id**
+* Other approach **ssh-copy-id**, which helps to add host machine ssh keys to centos7Base machine which is much simple
+
+```
+[host@machine ~]$ ssh-copy-id mosipuser@centos7Base 
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+mosipuser@centos7base's password: 
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'mosipuser@centos7Base'"
+and check to make sure that only the key(s) you wanted were added.
+
+
+```
 
 # References
 
