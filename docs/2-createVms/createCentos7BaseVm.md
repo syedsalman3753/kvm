@@ -48,7 +48,17 @@ createVmCentos7.sh
 
 * centos7Base is the VM from which every other VM is created for mosip installation.
 
-* Follow these directions when they come up during OS installation.
+Follow these directions when they come up during OS installation.
+
+* When the install centos install instructions come up, use Text Mode (Not VNC)
+* Set time zone asia / kolkata
+* set up NTP: use this server address: ntp-b.nist.gov
+* Software selection: minimum install
+* Set root password to mosipuser
+* Set a user as mosipuser, password mosipuser
+* Use defaults for installation destination
+
+Follow these directions when they come up during OS installation.
 
 ### I. Select "Use text mode" not VNC & then Enter
 
@@ -729,7 +739,7 @@ uid=1000(mosipuser) gid=1000(mosipuser) groups=1000(mosipuser),991(libvirt)
 * Start a virtual machine using virsh command
 
 ```
-[host@machine ~]$  virsh start centos7Base
+[host@machine ~]$ virsh start centos7Base
 Domain centos7Base started
 ```
 
@@ -772,7 +782,7 @@ localhost login:
 * To shutdown vm
 
 ```
-[host@machine ~]$  sudo virsh shutdown centos7Base
+[host@machine ~]$ sudo virsh shutdown centos7Base
 Domain centos7Base is being shutdown
 ```
 

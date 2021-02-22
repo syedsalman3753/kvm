@@ -43,12 +43,12 @@ chkVmFile(){
     	exit 1
 	  fi
 
-	  # check existence of vm
-	  res=$(virsh desc $vm)
-	  if [ "$res" == "" ]; then
-		  echo "$(tput setaf 1) $vm machine does not exists; EXITING$(tput sgr0) ";
-		  exit 1;
-	  fi
+    # check existence of vm
+    res=$(virsh desc $vm  2>&1 | grep error | wc -l )
+    if [[ $res -eq 1 ]]; then
+      echo "$(tput setaf 1) $vm machine does not exists; EXITING $(tput sgr0)";
+      exit 1;
+    fi
   done
 }
 # check vm connectivity
