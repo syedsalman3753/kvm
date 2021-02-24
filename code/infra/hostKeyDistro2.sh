@@ -74,3 +74,86 @@ chkConn() {
   echo "$(tput setaf 1) $chkVm not able to connect at $user; EXITING"
   exit 1
 }
+
+# The script starts from here
+
+echo -e "$(tput setaf 2) \n USAGE: bash hostkeyDistro2.sh mosipVm.list passwd.txt \n";
+echo "$(tput setaf 4) This script will make Host machine passwordLess access to all vm's listed in mosipVm.list file ";
+
+# To check wheather all arguments are present and valid or not.
+# Check mosipVm.list file present and valid or not.
+if [[  $1 == "" ]]; then
+  echo "$(tput setaf 1) File name not provided; EXITING";
+  exit 1;
+elif ! [[ $1 =~ ^[0-9a-zA-Z/._-]+$ ]]; then
+  echo "$(tput setaf 1) $1 is not a valid file name; EXITING "
+  exit 1
+elif [[ ! -f $1 ]]; then
+  echo "$(tput setaf 1) File $1 not found; EXITING ";
+  exit 1;
+
+# check password file is provided or not and valid or not.
+elif [[  $2 == "" ]]; then
+  echo "$(tput setaf 1) Password File is not provided; EXITING";
+  exit 1;
+elif ! [[ $2 =~ ^[0-9a-zA-Z/._-]+$ ]]; then
+  echo "$(tput setaf 1) $2 is not a valid file name; EXITING "
+  exit 1
+elif [[ ! -f $2 ]]; then
+  echo "$(tput setaf 1) File $2 not found; EXITING ";
+  exit 1;
+fi
+
+# Save vmFilename & password file into a variable
+vmList=$(<$1)
+passwd=$(<$2)
+
+# calling userCh function which will ask you whether they want to continue or not
+userCh  			# calling userCh function
+chksshPass			# calling sshPass function
+chkVmFile $1   		# calling checkVmFile function
+
+# listing status of all vm's
+virsh list --all
+
+# starting vm's if they are shutdown
+echo -n " --------- VM connectivity test ";
+printf '%*.0s\n' $(( $(tput cols)-32)) "" | tr " " "-"
+
+for vm in $vmList; do
+  vmRunning=$(virsh list | grep -w $vm | wc -l)
+  if [[ $vmRunning -eq "0" ]]; then
+    echo -n "  "
+    tput setaf 10
+    virsh start $vm;
+    tput sgr0
+  else
+    echo -e "$(tput setaf 2) \n  Domain $vm Running$(tput sgr0)"
+  fi
+done
+
+# test connectivity from host machine to $vm machine
+for vm in $vmList; do
+  echo -e "\n $(tput setaf 6)[ $vm ] $(tput sgr0)";
+  chkConn $vm "mosipuser"; # calling chkConn function
+  chkConn $vm "root"; # calling chkConn function
+done
+
+# To add host ssh keys fro both mosipuser & root user
+echo -e "\n"
+echo -n " ---------- ADD SSH Key To The Machine ";
+printf '%*.0s' $(( $(tput cols)-40)) "" | tr " " "-"; echo -e "\n";
+
+for vm in $vmList; do
+  echo -e "\n $(tput setaf 6)[ $vm ] $(tput sgr0)";
+  for user in root mosipuser; do
+    ssh_out=$(sshpass -p "$passwd" ssh-copy-id $user@$vm 2>&1 | grep "Number of key(s) added:" | wc -l )
+    if [[ $ssh_out -eq 0 ]]; then
+    	# If file is already existed show existance.
+ 		echo "$(tput setaf 2)   $3 machine ssh key already present in $vm for user ---> $user!! $(tput sgr0) ";
+ 		continue
+    fi
+    # if new key is inserted
+    echo "$(tput setaf 3)   $3 machine ssh key inserted in $vm machine for user --> $!! $(tput sgr0) ";
+  done
+done   
