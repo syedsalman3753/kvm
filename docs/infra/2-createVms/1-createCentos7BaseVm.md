@@ -977,7 +977,21 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added 'centos7base' (ECDSA) to the list of known hosts.
 [mosipuser@centos7Base ~]$ 
 ```
-## Make centos7Base passwordLess access 
+
+## Setup passwordless sudoer for mosipuser
+
+* On host machine, execute this command to make passwordless sudoer for mosipuser
+
+```
+[host@machine ~]$ sudo virt-customize -d centos7Base --run-command "echo 'mosipuser ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
+[sudo] password for anadi: 
+[   0.0] Examining the guest ...
+[   3.2] Setting a random seed
+[   3.3] Running: echo 'mosipuser ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+[   3.5] Finishing off
+```
+
+## Make centos7Base machine passwordLess SSH access
 
 * To make passwordLess access to any vm.
 * First we need get ssh public key ~/.ssh/ folder. 
