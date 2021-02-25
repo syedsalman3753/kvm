@@ -102,7 +102,7 @@ virsh list --all
 
 # start all vm's
 echo -n " --------- Start VM's & Test its Connectivity ";
-printf '%*.0s\n' $(( $(tput cols)-50)) "" | tr " " "-"
+printf '%*.0s\n' $(( $(tput cols)-47)) "" | tr " " "-"
 for vm in $vmList; do
   vmStart $vm
 done

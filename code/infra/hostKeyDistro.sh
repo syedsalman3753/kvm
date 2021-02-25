@@ -132,7 +132,6 @@ addKey2Vm(){
 
 
 # The script starts from here
-
 echo -e "$(tput setaf 2) \n USAGE: bash hostkeyDistro2.sh mosipVm.list passwd.txt \n";
 echo "$(tput setaf 4) This script will make Host machine passwordLess access to all vm's listed in mosipVm.list file ";
 
@@ -174,7 +173,7 @@ virsh list --all
 
 # starting vm's if they are shutdown
 echo -n " --------- VM connectivity test ";
-printf '%*.0s\n' $(( $(tput cols)-32)) "" | tr " " "-"
+printf '%*.0s\n' $(( $(tput cols)-33)) "" | tr " " "-"
 
 for vm in $vmList; do
   vmRunning=$(virsh list | grep -w $vm | wc -l)

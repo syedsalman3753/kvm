@@ -104,7 +104,7 @@ virsh list --all    # list all vm's
 
 # Shutdown all vm's
 echo -n " --------- Shutdown VM's & Check its Status ";
-printf '%*.0s\n' $(( $(tput cols)-50)) "" | tr " " "-"
+printf '%*.0s\n' $(( $(tput cols)-45)) "" | tr " " "-"
 for vm in $vmList; do
   vmShutdown $vm    # calling vmShutdown function
 done

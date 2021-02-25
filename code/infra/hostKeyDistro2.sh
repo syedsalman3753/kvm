@@ -123,7 +123,7 @@ virsh list --all
 
 # starting vm's if they are shutdown
 echo -n " --------- VM connectivity test ";
-printf '%*.0s\n' $(( $(tput cols)-32)) "" | tr " " "-"
+printf '%*.0s\n' $(( $(tput cols)-33)) "" | tr " " "-"
 
 for vm in $vmList; do
   vmRunning=$(virsh list | grep -w $vm | wc -l)
