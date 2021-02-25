@@ -102,6 +102,11 @@ elif ! [[ $2 =~ ^[0-9a-zA-Z/._-]+$ ]]; then
 elif [[ ! -f $2 ]]; then
   echo "$(tput setaf 1) File $2 not found; EXITING ";
   exit 1;
+
+# check ssh-copy-id is installed on host machine
+elif [[ ! -f "/usr/bin/ssh-copy-id" ]]; then
+  echo "$(tput setaf 1) ssh-copy-id not Installed; EXITING ";
+  exit 1;
 fi
 
 # Save vmFilename & password file into a variable
@@ -135,8 +140,8 @@ done
 # test connectivity from host machine to $vm machine
 for vm in $vmList; do
   echo -e "\n $(tput setaf 6)[ $vm ] $(tput sgr0)";
-  chkConn $vm "mosipuser"; # calling chkConn function
-  chkConn $vm "root"; # calling chkConn function
+  chkConn $vm "mosipuser";			# calling chkConn function
+  chkConn $vm "root"; 				# calling chkConn function
 done
 
 # To add host ssh keys fro both mosipuser & root user
@@ -144,10 +149,18 @@ echo -e "\n"
 echo -n " ---------- ADD SSH Key To The Machine ";
 printf '%*.0s' $(( $(tput cols)-40)) "" | tr " " "-"; echo -e "\n";
 
+
+
+# copy HOST machine ssh public key to host machines ~/.ssh/authorized_keys file
+echo -e "\n $(tput setaf 6)[ $HOSTNAME ] $(tput sgr0)";
+ssh-copy-id -o StrictHostKeyChecking=no $USER@$HOSTNAME
+
+
+# make ssh passwordLess from host to vm's
 for vm in $vmList; do
   echo -e "\n $(tput setaf 6)[ $vm ] $(tput sgr0)";
   for user in root mosipuser; do
-    ssh_out=$(sshpass -p "$passwd" ssh-copy-id $user@$vm 2>&1 | grep "Number of key(s) added:" | wc -l )
+    ssh_out=$( sshpass -p "$passwd" ssh-copy-id -o StrictHostKeyChecking=no $user@$vm 2>&1 | grep "Number of key(s) added:" | wc -l )
     if [[ $ssh_out -eq 0 ]]; then
     	# If file is already existed show existance.
  		echo "$(tput setaf 2)   $3 machine ssh key already present in $vm for user ---> $user!! $(tput sgr0) ";
