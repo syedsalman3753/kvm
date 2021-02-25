@@ -78,6 +78,10 @@ chkConn() {
 
 # The script start from here
 
+# USAGE & scipt Description
+echo -e "\n$(tput setaf 2) USAGE: bash allVmSnapShorts.sh vmlistFilename chkptName\n $(tput sgr0)";
+echo "$(tput setaf 4) This script will create SnapShorts of all vm's present in input file$(tput sgr0)";
+
 # if mosipVm.list is not available? add validation. Read the vmList as input parameter to the list
 if [[  $1 == "" ]]; then
   echo "$(tput setaf 1) File name not provided; EXITING $(tput sgr0) ";
@@ -96,9 +100,6 @@ elif ! [[ $2 =~ ^[0-9a-zA-Z._-]+$ ]]; then
   exit 1
 fi
 
-# USAGE & scipt Description
-echo -e "\n$(tput setaf 2) USAGE: bash allVmSnapShorts.sh vmlistFilename chkpt_name\n $(tput sgr0)";
-echo "$(tput setaf 4) This script will create SnapShorts of all vm's present in input file$(tput sgr0)";
 
 vmList=$(<$1);   # save the content of input file into a variable
 chkpt=$2         # Save chkpt
