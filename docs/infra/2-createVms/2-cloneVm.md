@@ -261,7 +261,7 @@ Domain title updated successfully
 [host@machine infra]$ bash vmClone.sh mzworker2.sb centos78Base
 
 [host@machine infra]$ bash vmClone.sh dmzmaster.sb centos78Base
-[host@machine infra]$ bash vmClone.sh mzworker0.sb centos78Base
+[host@machine infra]$ bash vmClone.sh dmzworker0.sb centos78Base
 ```
 
 * Now add "MAC address" & "IP address" to default network 
