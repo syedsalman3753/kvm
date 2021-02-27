@@ -8,7 +8,7 @@ vmShutdown(){
 	  echo -e "$(tput setaf 2)\n\t Domain $vm Shutdown $(tput sgr0)"
 	  return
  	else
-    echo -en "\t "
+    echo -en "\n\t "
     tput setaf 10
     virsh shutdown $vm;
     tput sgr0
