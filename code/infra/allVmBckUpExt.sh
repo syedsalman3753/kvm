@@ -124,9 +124,10 @@ bckUpQcow2(){
     
   # copy vm image to AllVmBckUp Directory  
   sudo cp $imgPath $loc/$vm-$chkpt.qcow2 ;
-    
+
+  
   # Check if snapshots are present or not. 
-    # If present copy and save it under AllVmBckUpExt Directory   
+  # If present copy and save it under AllVmBckUpExt Directory   
      
   snpExt=$(sudo ls /var/lib/libvirt/qemu/snapshot/$vm 2>&1)
   snpExtCount=$(echo $snpExt | grep "No such file or directory" | wc -l )
@@ -224,15 +225,15 @@ for vm in $vmList; do
   bckUpXML $vm $chkpt         # calling bckUpXML function
   bckUpQcow2 $vm $chkpt       # calling bckUpQcow2 function
   echo "$(tput setaf 3)   BackUp has been taken successfully for $vm machine$(tput sgr0)"
-
- # Changing the file permission of snapshots
-  chmodRes=$(sudo chmod -R 777 $loc/$vm 2>&1)
-
-  chmdResCount=$(echo $chmodRes | grep -w "No such file or directory" | wc -l )
-
-  if [[ $chmdResCount -eq 1 ]]; then
-    continue
-  fi
 done
+
+# Changing the file permission
+chmodRes=$(sudo chmod -R 777 $loc/ 2>&1)
+
+chmdResCount=$(echo $chmodRes | grep -w "No such file or directory" | wc -l )
+
+if [[ $chmdResCount -eq 1 ]]; then
+	continue
+fi
 
 echo -e "$(tput setaf 2)\n BackUp has been taken successfully all vm's!!!$(tput sgr0)"
