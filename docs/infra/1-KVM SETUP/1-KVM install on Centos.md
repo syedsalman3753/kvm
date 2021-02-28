@@ -7,7 +7,7 @@ Make sure that your system has the hardware virtualization extensions: For Intel
 ```
 [mosipuser@k8Master1 ~]$ grep -e 'vmx' /proc/cpuinfo
 ```
-![Screen](../../images/check_cpu_virtualization.png)
+![Screen](../../../images/check_cpu_virtualization.png)
 
 Make sure that Virtualization Technology (VT) is enabled in your server’s BIOS. 
 
@@ -15,7 +15,7 @@ Make sure that Virtualization Technology (VT) is enabled in your server’s BIOS
 [mosipuser@k8Master1 ~]$ lscpu | grep Virtualization
 ```
 
-![Screen](../../images/check_virtualization_enable.png)
+![Screen](../../../images/check_virtualization_enable.png)
 
 ### Step 1: Update the System
 
@@ -106,7 +106,7 @@ we also could launch/start it from terminal as well as from GUI.
 [mosipuser@k8Master1 ~]$ virt-manager
 ```
                  
- ![virt-manager](../../images/virt-manager.png)
+ ![virt-manager](../../../images/virt-manager.png)
  
  
 # References

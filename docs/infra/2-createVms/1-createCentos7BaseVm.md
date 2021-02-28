@@ -1058,5 +1058,6 @@ and check to make sure that only the key(s) you wanted were added.
 
 # References
 
-1. [Serverfault](https://serverfault.com/questions/875367/vm-started-but-it-is-not-listed-by-virsh)
-2. [computingforgeeks.com](https://computingforgeeks.com/use-virt-manager-as-non-root-user/)
+1. [raymii.org](https://raymii.org/s/articles/virt-install_introduction_and_copy_paste_distro_install_commands.html#toc_5)
+*  [Serverfault](https://serverfault.com/questions/875367/vm-started-but-it-is-not-listed-by-virsh)
+*  [computingforgeeks.com](https://computingforgeeks.com/use-virt-manager-as-non-root-user/)

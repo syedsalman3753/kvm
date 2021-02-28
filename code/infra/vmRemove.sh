@@ -80,7 +80,7 @@ rmSnpshot(){
 rmQcow2File(){
 	vm=$1
  	vmPool=$2
- 	vmImgPath=$(virsh vol-list --pool default 2>&1 | grep $vm | awk '{print $2}')
+ 	vmImgPath=$(virsh vol-list --pool $vmPool 2>&1 | grep -w $vm | awk '{print $2}')
 
  	if ! [[ -f $vmImgPath ]]; then
  		echo -e "$(tput setaf 5)\n\t $vm machine qcow2 image path not found; Skipping";
@@ -88,7 +88,7 @@ rmQcow2File(){
  	fi
     echo -ne "\n\t "
     tput setaf 10
-    virsh vol-delete $vm.qcow2 --pool $vmPool
+    virsh vol-delete "$vm.qcow2" --pool $vmPool
     tput sgr0 
     return
 }
@@ -139,5 +139,5 @@ echo -n "$(tput setaf 9)    [Remove-qcow2 image] $(tput sgr 0)"
  rmQcow2File $vmName $poolName       # calling rmQcow2File function
 
 # undefine vm 
-echo -n "$(tput setaf 9)    [Undefine $vm] $(tput sgr 0)"
+ echo -n "$(tput setaf 9)    [Undefine $vm] $(tput sgr 0)"
  vmUndefine $vmName                	# calling vmUndefine function
