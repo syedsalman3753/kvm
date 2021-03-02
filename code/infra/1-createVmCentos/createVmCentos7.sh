@@ -125,3 +125,11 @@ virt-install \
 --console pty,target_type=serial \
 --location 'http://mirror.i3d.net/pub/centos/7/os/x86_64/' \
 --extra-args 'console=ttyS0,115200n8 serial'
+
+
+# Other links if above one fails. 
+# Goto centos.org website from here get link with specified path as below
+
+# 1. https://mirrors.piconets.webwerks.in/centos-mirror/7/os/x86_64/
+# 2. https://centos.hbcse.tifr.res.in/centos/7/os/x86_64/
+# 3. http://centos.mirror.snu.edu.in/centos/7/os/x86_64/

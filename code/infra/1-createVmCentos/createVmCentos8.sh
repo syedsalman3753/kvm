@@ -123,5 +123,14 @@ virt-install \
 --network bridge=virbr0 \
 --graphics none \
 --console pty,target_type=serial \
---location 'http://mirror.i3d.net/pub/centos/8/BaseOS/x86_64/os/' \
+--location 'http://centos.mirror.snu.edu.in/centos/8/BaseOS/x86_64/os/' \
 --extra-args 'console=ttyS0,115200n8 serial'
+
+
+# Reference link to down centos 8
+# Goto centos.org website
+# Links
+# 1. https://centos.mirror.snu.edu.in/centos/8/BaseOS/x86_64/os/
+# 2. http://mirror.i3d.net/pub/centos/8/BaseOS/x86_64/os/
+# 3. http://centos.hbcse.tifr.res.in/centos/8/BaseOS/x86_64/os/
+
