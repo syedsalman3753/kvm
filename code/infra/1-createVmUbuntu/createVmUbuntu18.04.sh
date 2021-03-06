@@ -103,7 +103,7 @@ else
   fi
 fi
 
-userCh       # calling userCh function
+userCh       # calling userCh function 
 chkSudoer    # calling chkSudoer function
 
 # save arguments values into a variables
