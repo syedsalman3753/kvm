@@ -146,9 +146,10 @@ Domain centosVM is being shutdown
 * In case you would like to shutdown all running domains, just issue the command below:
 
 ```
-[host@machine:~]$ for vm in `sudo virsh list --all | grep "running" |awk 'NR>2{print [host@machine:~]$2}'`; do
-	 sudo virsh shutdown [host@machine:~]$vm;
-  done
+[host@machine:~]$
+for vm in `sudo virsh list --all | grep "running" |awk '{print $2}'`; do  
+	sudo virsh shutdown $vm
+done
 ```
 
 ### 10. virsh start all running vms
@@ -156,9 +157,10 @@ Domain centosVM is being shutdown
 * In case you would like to shutdown all running domains, just issue the command below:
 
 ```
-[host@machine:~]$ for vm in `sudo virsh list --all | grep "shut off" |awk 'NR>2{print [host@machine:~]$2}'`; do
-	 sudo virsh start [host@machine:~]$vm;
-  done
+[host@machine:~]$ 
+for vm in `sudo virsh list --all | grep "shut off" |awk '{print $2}'`; do  
+	sudo virsh start $vm
+done
 ```
 
 ### 11. virsh reboot vm
