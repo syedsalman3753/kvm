@@ -32,7 +32,7 @@ chkSudoer(){
 
 
 # The script starts from Here
-echo -e "$(tput setaf 2) \n USAGE: bash createVmUbuntu18.04.sh vmName vmRAM(MiB) vCPU vmDiskSize(GiB) \n";
+echo -e "$(tput setaf 2) \n USAGE: bash createUbuntu20.04.sh vmName vmRAM(MiB) vCPU vmDiskSize(GiB) \n";
 echo "$(tput setaf 4) This script will create a new Ubuntu VM ";
 
 # check for valid arguments
@@ -119,16 +119,16 @@ virt-install \
 --disk path=/var/lib/libvirt/images/"$vmName".qcow2,size="$vmDiskSize" \
 --vcpus "$vCPU" \
 --os-type linux \
---os-variant ubuntu18.04 \
+--os-variant ubuntu20.04 \
 --network bridge=virbr0 \
 --graphics none \
 --console pty,target_type=serial \
---location  'http://jp.archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/' \
+--location  'http://jp.archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/' \
 --extra-args 'console=ttyS0,115200n8 serial'
 
 
 # Reference link to down centos 8
 # Goto centos.org website
 # Links
-# 1. http://jp.archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/
+# 1. http://jp.archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/
 # 2. https://serverfault.com/questions/364895/virsh-vm-console-does-not-show-any-output
