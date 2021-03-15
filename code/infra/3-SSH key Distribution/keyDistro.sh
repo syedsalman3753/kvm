@@ -90,17 +90,17 @@ chkMakeKey(){
   vm=$1
   usr=$2
   ssh_exit_status=0
-	ssh $usr@$vm  " if [[ ! -f ~/.ssh/id_rsa.pub  || ! -f ~/.ssh/id_rsa ]]; then
-	                    echo -e '\ny' | ssh-keygen -t rsa -b 2048 -N '' ;
+  ssh $usr@$vm  " if [[ ! -f ~/.ssh/id_rsa.pub  || ! -f ~/.ssh/id_rsa ]]; then
+	                    echo -e '\ny' | ssh-keygen -t rsa -b 2048 -N '' | sed 's,.*,$(tput setaf 2)\t&$(tput sgr0),';
 	                    "ssh_exit_status"=$(echo $?)
 
   						        if [ "$ssh_exit_status" -gt 0 ]; then
-    								    echo 'Failed to Generate SSH key; EXITING'
+    								    echo 'Failed to Generate SSH key; EXITING' | sed 's,.*,$(tput setaf 2)\t&$(tput sgr0),';
     								    exit 1;
   							      fi
   							      exit 0;
 	                fi
-	              " # end of ssh
+	              " # end of ssh  
 
   ssh_exit_status=$(echo $?)
   tput sgr0
@@ -209,7 +209,6 @@ done
 for vm in $vmList; do
 	echo -e "\n $(tput setaf 6)[ $vm ] $(tput sgr0)";
 	chkConn $vm  "root" # calling chkConn function
-	chkConn $vm  "mosipuser" # calling chkConn function
 done
 
 # Iterate through specified file and add ssh key to vm's

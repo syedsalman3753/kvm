@@ -140,7 +140,6 @@ done
 # test connectivity from host machine to $vm machine
 for vm in $vmList; do
   echo -e "\n $(tput setaf 6)[ $vm ] $(tput sgr0)";
-  chkConn $vm "mosipuser";			# calling chkConn function
   chkConn $vm "root"; 				# calling chkConn function
 done
 
@@ -153,7 +152,7 @@ printf '%*.0s' $(( $(tput cols)-40)) "" | tr " " "-"; echo -e "\n";
 
 # copy HOST machine ssh public key to host machines ~/.ssh/authorized_keys file
 echo -e "\n $(tput setaf 6)[ $HOSTNAME ] $(tput sgr0)";
-ssh-copy-id -o StrictHostKeyChecking=no $USER@$HOSTNAME
+ssh-copy-id -o StrictHostKeyChecking=no $USER@$HOSTNAME 2>&1
 
 
 # make ssh passwordLess from host to vm's
@@ -167,6 +166,6 @@ for vm in $vmList; do
  		continue
     fi
     # if new key is inserted
-    echo "$(tput setaf 3)   $3 machine ssh key inserted in $vm machine for user --> $!! $(tput sgr0) ";
+    echo "$(tput setaf 3)   $3 machine ssh key inserted in $vm machine for user --> $user!! $(tput sgr0) ";
   done
 done   

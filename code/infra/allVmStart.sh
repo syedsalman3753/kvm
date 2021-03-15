@@ -113,7 +113,6 @@ sleep 10
 for vm in $vmList; do
 	echo -e "\n $(tput setaf 6)[ $vm ] $(tput sgr0)";
 	chkConn $vm  "root" # calling chkConn function
-	chkConn $vm  "mosipuser" # calling chkConn function
 done
 
 echo -e "\n$(tput setaf 2)  Successfully Started All VM's $(tput sgr0)";
