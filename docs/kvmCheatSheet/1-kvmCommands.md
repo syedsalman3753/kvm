@@ -200,9 +200,25 @@ In this example, storage volume is named /var/lib/libvirt/images/centosVM.qcow2
 --os-variant=rhel7 \
 --disk path=/var/lib/libvirt/images/centos7.qcow2,bus=virtio,size=10 \
 --graphics none \
---location [host@machine:~]$HOME/iso/CentOS-7-x86_64-Everything-1611.iso \
+--location $HOME/iso/CentOS-7-x86_64-Everything-1611.iso \
 --network bridge:virbr0  \
 --console pty,target_type=serial -x 'console=ttyS0,115200n8 serial'
+```
+ or
+ 
+```
+[host@machine:~]$ sudo virt-install \
+--name $vmName \
+--ram $vmRAM \
+--disk path=/var/lib/libvirt/images/"$vmName".qcow2,size="$vmDiskSize" \
+--vcpus "$vCPU" \
+--os-type linux \
+--os-variant centos7.0 \
+--network bridge=virbr0 \
+--graphics none \
+--console pty,target_type=serial \
+--location 'http://mirror.i3d.net/pub/centos/7/os/x86_64/' \
+--extra-args 'console=ttyS0,115200n8 serial'
 ```
 
 ### 14. virsh connect to vm console
@@ -405,11 +421,221 @@ node2.qcow2          /var/lib/libvirt/images/node2.qcow2
 node3.qcow2          /var/lib/libvirt/images/node3.qcow2            
 ```
 
-#TODO: 
 ## virsh Manage Snapshots
 
 
+### 1. Create snapshots
 
+#### 1. Create snapshots using snapshot-create-as
+
+* A snapshot – of a virtual machine – is a file-based representation of the state of the virtual machine at a given time. 
+* It includes disk data and configuration data of the VM. 
+* With a snapshot you can restore a machine to a previous state.
+
+```
+[host@machine:~]$ sudo virsh snapshot-create-as --domain vmName \
+--name "test_vm_snapshot1" \
+--description "test vm snapshot 1-working"
+
+Domain snapshot test_vm_snapshot1 created
+```
+
+#### 2. Create snapshots using snapshot-create
+
+* A snapshot – of a virtual machine – is a file-based representation of the state of the virtual machine at a given time. 
+* It includes disk data and configuration data of the VM. 
+* With a snapshot you can restore a machine to a previous state.
+
+```
+[host@machine:~]$ sudo virsh snapshot-create --domain vmName \
+Domain snapshot test_vm_snapshot1 created
+```
+ or
+ 
+```
+[host@machine:~]$ sudo virsh snapshot-create vmName \
+Domain snapshot test_vm_snapshot1 created
+```
+
+#### 3. GET or SET snapshots 
+
+```
+[host@machine:~]$ sudo virsh snapshot-current vmName 
+```
+
+
+### 2. List Snapshots
+
+* List snapshots of a VM
+
+```
+[host@machine:~]$ sudo virsh snapshot-list vmName
+```
+```
+[host@machine:~]$ sudo virsh snapshot-list master1
+
+ Name         Creation Time               State
+---------------------------------------------------
+ 1616829574   2021-03-27 12:49:34 +0530   shutoff
+```
+
+### 3. Display Snapshot information
+
+```
+sudo virsh snapshot-info vmName Snapshot-Name
+```
+```
+[host@machine:~]$ sudo virsh snapshot-info  master1 1616829574
+Name:           1616829574
+Domain:         master1
+Current:        yes
+State:          shutoff
+Location:       internal
+Parent:         -
+Children:       0
+Descendants:    0
+Metadata:       yes
+```
+
+### 4. Restore from Snapshots / Virsh revert vm snapshot 
+
+```
+[host@machine:~]$ sudo virsh snapshot-list vmName
+ Name                 Creation Time             State
+ ------------------------------------------------------------
+  1489689679           2017-03-16 21:41:19 +0300 shutoff
+  vm-1                 2017-03-16 22:11:48 +0300 shutoff
+  vm-2                 2017-03-18 02:15:58 +0300 running
+  vm-3                 2017-03-18 02:23:29 +0300 running
+```
+```
+[host@machine:~]$ sudo virsh snapshot-revert --domain vmName  --snapshotname vm-1  --running
+```
+
+### 5. Delete Snapshot 
+
+```
+[host@machine:~]$ sudo  virsh snapshot-delete vmName snapshotName
+```
+
+```
+[host@machine:~]$ sudo  virsh snapshot-delete --domain vmName --snapshotname  vm-2
+Domain snapshot vm-2 Deleted
+```
+```
+[host@machine:~]$ sudo virsh snapshot-list vmName
+ Name                 Creation Time             State
+ ------------------------------------------------------------
+  1489689679           2017-03-16 21:41:19 +0300 shutoff
+  vm-1                 2017-03-16 22:11:48 +0300 shutoff
+  vm-3                 2017-03-18 02:23:29 +0300 running
+```
+
+
+## clone VM
+
+* First Shutdown vm
+
+```
+[host@machine:~]$ sudo virsh destroy vmName-1
+Domain vmName destroyed
+```
+
+* 
+
+```
+[host@machine:~]$ sudo virt-clone --connect qemu:///system \
+--original vmName-1 \
+--name vmName-2 \
+--file /var/lib/libvirt/images/vmName-1.qcow2  
+
+
+Allocating 'vmName-2.qcow2'       |  10 GB  00:00:06
+
+Clone 'test_clone' created successfully.
+```
+
+```
+[host@machine:~]$ sudo virsh dominfo vmName-2
+Id:             -
+Name:           vmName-2
+UUID:           be0621fd-51b5-4d2b-a05c-ce76e59baafa
+OS Type:        hvm
+State:          shut off
+CPU(s):         1
+Max memory:     1048576 KiB
+Used memory:    1048576 KiB
+Persistent:     yes
+Autostart:      disable
+Managed save:   no
+Security model: none
+Security DOI:   0
+```
+
+## manage VM vcpus
+
+* Execute the below command to set vcpus
+
+```
+[host@machine:~]$ sudo virsh setvcpus --domain test --maximum 2 --config
+[host@machine:~]$ sudo virsh setvcpus --domain test --count 2 --config
+
+[host@machine:~]$ sudo virsh reboot test
+ Domain test is being rebooted
+```
+* Confirm that the number of vcpu has changed, the previous was 1, the current value is 2:
+
+```
+[host@machine:~]$ virsh dominfo test
+Id:             -
+Name:           test
+UUID:           a943ed42-ba62-4270-a41d-7f81e793d754
+OS Type:        hvm
+State:          shut off
+CPU(s):         2
+Max memory:     1048576 KiB
+Used memory:    1048576 KiB
+Persistent:     yes
+Autostart:      disable
+Managed save:   no
+Security model: none
+Security DOI:   0
+```
+
+## Manager VM RAM
+
+* To adjust the total ram used by the guest operating system, the following commands are used:
+
+```
+[host@machine:~]$ sudo virsh setmaxmem test 2048 --config
+[host@machine:~]$ sudo virsh setmem test 2048 --config
+[host@machine:~]$ sudo virsh reboot test
+Domain test is being rebooted
+```
+* Check domain info to confirm the current RAM allocated to the VM.
+
+```
+[host@machine:~]$ virsh dominfo test                     
+Id:             9
+Name:           test
+UUID:           a943ed42-ba62-4270-a41d-7f81e793d754
+OS Type:        hvm
+State:          running
+CPU(s):         2
+CPU time:       70.7s
+Max memory:     2048 KiB
+Used memory:    2048 KiB
+Persistent:     yes
+Autostart:      disable
+Managed save:   no
+Security model: none
+Security DOI:   0
+```
+
+
+#TODO:
+
+## Mount Virtual Disk
 # References
 
 1. [computingforgeeks.com](https://computingforgeeks.com/virsh-commands-cheatsheet/)
