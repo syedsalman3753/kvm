@@ -17,14 +17,14 @@ There are two methods
 ```
 [host@machine ~]$ virt-install --name CentOS_7_Server --memory 2048 --vcpus 1 --disk /home/sk/CentOS_7_Server.qcow2,bus=sata --import --os-variant centos7.0 --network default
 ```
-![vmImport-1.png](../../../images/vmImport-1.png)
+![vmImport-1.png](../../../../images/vmImport-1.png)
 
 * Replace "/home/sk/CentOS_7_Server.qcow2" with your actual path where you have saved the Qcow2 image.
 
 * This command will create a CentOS 7 KVM instance with 2GB RAM, 1 vCPU with Qcow2 virtual disk.
 
 * Once the VM is created, it will automatically open in Virt-viewer application. Virt-viewer is also part of the VIrt-manager package.
-![vmImport-2.png](../../../images/vmImport-2.png)
+![vmImport-2.png](../../../../images/vmImport-2.png)
 
 **2. virt-manager**
 
@@ -37,43 +37,43 @@ There are two methods
 ```
 [host@machine ~]$ virt-manger
 ```
-![vmImport-3.png](../../../images/vmImport-3.png)
+![vmImport-3.png](../../../../images/vmImport-3.png)
 
 * Navigate to File -> New Virtual Machine. Virt-manager will have an "Import existing disk image" option in the first window when creating a new virtual machine. Choose it and click Forward button.
 
-![vmImport-4.png](../../../images/vmImport-4.png)
+![vmImport-4.png](../../../../images/vmImport-4.png)
 
 * Choose the actual path of Qcow2 image and then choose the operating system's variant you want to install. In my case, I chose CentOS 7.
 
-![vmImport-5.png](../../../images/vmImport-5.png)
+![vmImport-5.png](../../../../images/vmImport-5.png)
 
 * Select browse local to select the qcow2 file
 
-![vmImport-6.png](../../../images/vmImport-6.png) 
+![vmImport-6.png](../../../../images/vmImport-6.png) 
 
 * Select toe qcow2 file
 
-![vmImport-7.png](../../../images/vmImport-7.png)
+![vmImport-7.png](../../../../images/vmImport-7.png)
 
 * Select the forward
 
-![vmImport-8.png](../../../images/vmImport-8.png)
+![vmImport-8.png](../../../../images/vmImport-8.png)
 
 * Provide RAM, CPU for vm
 
-![vmImport-9.png](../../../images/vmImport-9.png)
+![vmImport-9.png](../../../../images/vmImport-9.png)
 
 * Provide vm Name
 
-![vmImport-10.png](../../../images/vmImport-10.png)
+![vmImport-10.png](../../../../images/vmImport-10.png)
 
 * Now wait for Installation. Press enter 
 
-![vmImport-11.png](../../../images/vmImport-11.png)
+![vmImport-11.png](../../../../images/vmImport-11.png)
 
 * Provide username & password
 
-![vmImport-12.png](../../../images/vmImport-12.png)
+![vmImport-12.png](../../../../images/vmImport-12.png)
 
 ## 2. Create Use vmImportCentos7.0 script
 

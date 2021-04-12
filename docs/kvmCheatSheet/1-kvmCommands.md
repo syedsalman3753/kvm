@@ -11,7 +11,7 @@
 virsh [OPTION]... <command> <domain> [ARG]...
 ```
 
-## virsh Basic commands
+## List Virtual machines
 
 ### 1. virsh display node information
 
@@ -30,7 +30,7 @@ NUMA cell(s):        1
 Memory size:         16289340 KiB
 ```
 
-### 2. virsh list all domains
+### 2. List All Virtual Machines
 
 * To list both inactive and active domains, use the command:
 
@@ -46,7 +46,7 @@ Memory size:         16289340 KiB
 -     node1                          shut off
 ```
 
-### 3. List only active domains
+### 3. List only Running Virtual Machines
 
 * To list only active domains with virsh command, use:
 
@@ -56,7 +56,9 @@ Memory size:         16289340 KiB
  ---------------------------------------------------- 
 ```
 
-### 4. virsh start vm
+## Managing Guest State
+
+### 1. virsh start vm
 
 * This is an example on how to use virsh command to start a guest virtual machine. We’re going to start centosVM domain displayed above:
 
@@ -70,7 +72,7 @@ Domain centosVM started
  3     centosVMCentos                    running 
 ```
 
-### 5. virsh autostart vm
+### 2. virsh autostart vm
 
 * To set a vm to start automatically on system startup, do:
 
@@ -95,7 +97,7 @@ Security model: none
 Security DOI:   0
 ```
 
-### 6. virsh autostart disable
+### 3. virsh autostart disable
 
 * To disable autostart feature for a vm:
 
@@ -119,11 +121,14 @@ Security DOI:   0
  Security DOI:   0
 ```
 
-### 7. virsh stop vm, virsh shutdown vm
+### 4. virsh stop vm, virsh shutdown vm
 
 * To shutdown a running vm gracefully use:
 
 ```
+virsh shutdown $VM_ID_OR_NAME
+
+
 [host@machine:~]$ sudo virsh shutdown centosVM
 Domain centosVM is being shutdown
 
@@ -133,7 +138,7 @@ Domain centosVM is being shutdown
  
 ```
 
-### 8. virsh force shutdown vm
+### 5. virsh force shutdown or Destroy vm
 
 * You can do a forceful shutdown of active domain using the command:
 
@@ -141,7 +146,7 @@ Domain centosVM is being shutdown
 [host@machine:~]$ sudo virsh destroy centosVM
 ```
 
-### 9. virsh stop/shutdown all running vms
+### 6. virsh stop/shutdown all running vms
 
 * In case you would like to shutdown all running domains, just issue the command below:
 
@@ -152,7 +157,7 @@ for vm in `sudo virsh list --all | grep "running" |awk '{print $2}'`; do
 done
 ```
 
-### 10. virsh start all running vms
+### 7. virsh start all running vms
 
 * In case you would like to shutdown all running domains, just issue the command below:
 
@@ -163,7 +168,7 @@ for vm in `sudo virsh list --all | grep "shut off" |awk '{print $2}'`; do
 done
 ```
 
-### 11. virsh reboot vm
+### 8. virsh reboot vm
 
 * To restart a vm named centosVM, the command used is:
 
@@ -171,7 +176,37 @@ done
 [host@machine:~]$ sudo virsh reboot centosVM
 ```
 
-### 12. virsh remove vm
+### 9. Suspension
+
+* Suspension is a way to immediately "pause" a guest so that it no longer uses the CPU, disk, or network. However, it will continue to reside in memory. 
+
+* You may want to save/load a session instead, which would mean it no longer takes up memory, but is not instant. such that it no longer takes up memory and can be restored to its exact state (even after a reboot), it is necessary to save and restore the guest.
+
+**NOTE:** When a domain is in a suspended state, it still consumes system RAM. Disk and network I/O will not occur while the guest is suspended.
+
+**Warning: A suspended session will be lost if the host system is rebooted. However, a saved guest does persist.**
+
+```
+[host@machine:~]$ virsh suspend $VM_ID_OR_NAME
+```
+
+```
+[host@machine:~]$ sudo virsh resume centosVM
+Domain centosVM suspend
+```
+
+### 10. Resume VM
+
+* This will cancel the suspension
+
+```
+[host@machine:~]$ virsh resume $VM_ID_OR_NAME
+```
+```
+[host@machine:~]$ sudo virsh resume centosVM
+Domain centosVM resumed
+```
+## Remove a VM 
 
 * To cleanly remove a vm including its storage columes, use the commands shown below.
 * The domain centosVM should be replaced with the actual domain to be removed.
@@ -184,7 +219,21 @@ done
 In this example, storage volume is named /var/lib/libvirt/images/centosVM.qcow2
 ```
 
-### 13. virsh create a vm
+* If you want to remove vm using a shell script
+
+```
+[host@machine:~]$ cd ~/kvm/code/infra/4-vmRemove
+
+[host@machine:~]$ bash vmRemove.sh vNode default
+
+  USAGE: bash vmRemove.sh vmName vmPoolName 
+ 
+ Are you sure you want to forever destroy vNode? y
+```
+
+## Create VM
+
+### 1. virsh create a vm
 
 * If you would like to create a new virtual machine with virsh, the relevant command to use is `virt-install. 
 * This is crucial and can’t miss on virsh commands cheatsheet arsenal. 
@@ -221,8 +270,53 @@ In this example, storage volume is named /var/lib/libvirt/images/centosVM.qcow2
 --extra-args 'console=ttyS0,115200n8 serial'
 ```
 
-### 14. virsh connect to vm console
+### 2. clone VM
 
+* First Shutdown vm
+
+```
+[host@machine:~]$ sudo virsh destroy vmName-1
+Domain vmName destroyed
+```
+
+* Use teh below command to clone a vm in KVM
+
+```
+[host@machine:~]$ sudo virt-clone --connect qemu:///system \
+--original vmName-1 \
+--name vmName-2 \
+--file /var/lib/libvirt/images/vmName-1.qcow2  
+
+
+Allocating 'vmName-2.qcow2'       |  10 GB  00:00:06
+
+Clone 'test_clone' created successfully.
+```
+
+```
+[host@machine:~]$ sudo virsh dominfo vmName-2
+Id:             -
+Name:           vmName-2
+UUID:           be0621fd-51b5-4d2b-a05c-ce76e59baafa
+OS Type:        hvm
+State:          shut off
+CPU(s):         1
+Max memory:     1048576 KiB
+Used memory:    1048576 KiB
+Persistent:     yes
+Autostart:      disable
+Managed save:   no
+Security model: none
+Security DOI:   0
+```
+
+### 3. virsh import
+
+refer to this doc [vmImport](./infra/1-createVms/1-createVmsCentos/3-vmImport.md)
+
+## Guest Console
+
+### 1. Enter Guest's Console
 
 * To connect to the guest console, use the command:
 
@@ -235,7 +329,41 @@ Escape character is ^]
 ```
 This will return a fail message if an active console session exists for the provided domain. 
 
-### 15. Virsh edit vm xml file
+### 2. Exit Guest's Console
+
+* Use the following keyboard shortcut (not a command):
+
+* press control + left brackets.
+
+```
+Cntrl + ]  
+```
+
+## Defining 
+
+### 1. Defining a Guest
+
+* Defining a guest allows one to start it from its name, rather than having to find it's XML file and running virsh create $name.xml.
+* This means that guests will also show in virsh list --all when they are shutdown.
+
+```
+[host@machine:~]$ virsh define filename.xml
+```
+
+### 2. Undefine a Guest
+
+* In order to use a name over again for a new guest, you have to undefine the old one. 
+* You need to remove it's storage system as well.
+
+```
+[host@machine:~]$ virsh undefine VM_ID or vmName
+```
+
+## Guest Configuration
+
+You can manually edit the guest's xml configuration file with:
+
+### 1. virsh edit vm xml file
  
 * To edit a vm xml file, use:
 
@@ -249,50 +377,42 @@ This will return a fail message if an active console session exists for the prov
 [host@machine:~]$ sudo EDITOR=nano virsh edit centosVM
 ```
 
-
-### 16. virsh suspend vm, virsh resume vm
-
-* To suspend a guest called centosVM with virsh command, run:
+* You can manually edit the guest's xml configuration file with:
 
 ```
-[host@machine:~]$ sudo virsh suspend centosVM
-Domain centosVM suspended
+[host@machine:~]$ virsh edit $VM_ID
 ```
-NOTE: When a domain is in a suspended state, it still consumes system RAM. Disk and network I/O will not occur while the guest is suspended.
+** Note: Changes will not take effect until the guest is rebooted.**
 
-### 17. Resuming a guest vm:
+### 2. List OS Variants
 
-* To restore a suspended guest with virsh using the resume option:
-
-```
-[host@machine:~]$ sudo virsh resume centosVM
-Domain centosVM resumed
-```
-
-### 18. virsh save vm
-
-* To save the current state of a vm to a file using the virsh command :
+* When creating a guest with virt-install you need to specify the --os-variant. 
+* To get a list of acceptable values (on Ubuntu 16.04), install the libosinfo-bin package before running the command below:
 
 ```
-[host@machine:~]$ sudo virsh save centosVM /home/kvmUser/centosVM.saved
-Domain centosVM saved to centosVM.save
-
-[host@machine:~]$ ls -l centosVM.save 
--rw------- 1 root root 328645215 Mar 18 01:35 centosVM.saved
+[host@machine:~]$ osinfo-query os
 ```
 
-### 19. Restoring a saved vm
+### 3. Rename guest
 
-* To restore saved vm from the file:
+* Rename VM 
 
 ```
-[host@machine:~]$ virsh restore /home/kvmUser/centosVM.save 
-Domain restored from centosVM.save
+[host@machine:~]$ virsh domrename $OLD_NAME $NEW_NAME
+```
 
-[host@machine:~]$ sudo virsh list
- Id    Name                           State
- ----------------------------------------------------
-  7    centosVM                           running
+**Note: You can only do this whilst the guest is not running.**
+
+### 4. Guest Start on Boot (Autostart)
+
+```
+[host@machine:~]$ virsh autostart $VM_ID
+```
+
+### 5. To disable Guest Autostart
+
+```
+[host@machine:~]$ virsh autostart --disable $VM_ID
 ```
 
 ## virsh Manage Volumes
@@ -421,8 +541,59 @@ node2.qcow2          /var/lib/libvirt/images/node2.qcow2
 node3.qcow2          /var/lib/libvirt/images/node3.qcow2            
 ```
 
-## virsh Manage Snapshots
+### 6. List volumes
 
+* List all volumes for default pool 
+
+```
+[host@machine:~]$ sudo virsh vol-list poolName
+```
+```
+[host@machine:~]$ sudo virsh vol-list default
+ Name                 Path                                    
+ ------------------------------------------------------------------------------
+admin.qcow2          /var/lib/libvirt/images/admin.qcow2     
+cloudstack.qcow2     /var/lib/libvirt/images/cloudstack.qcow2
+ipa.qcow2            /var/lib/libvirt/images/ipa.qcow2       
+katello.qcow2        /var/lib/libvirt/images/katello.qcow2   
+node1.qcow2          /var/lib/libvirt/images/node1.qcow2     
+node2.qcow2          /var/lib/libvirt/images/node2.qcow2     
+node3.qcow2          /var/lib/libvirt/images/node3.qcow2 
+```
+
+# BackUP VM
+
+## 1. virsh save virtual machine
+
+### 1. Save Guest
+
+* Saves the RAM (not including disk) of a running guest to a "state file" at the specified file name/path, so that it can be restored later. 
+* Once saved, the domain will no longer be running on the system, thus the memory allocated for the domain will be free for other domains to use. virsh restore (in "Load Guest" below) restores from this state file.
+* To save the current state of a vm to a file using the virsh command :
+
+```
+[host@machine:~]$ sudo virsh save centosVM /home/kvmUser/centosVM.saved
+Domain centosVM saved to centosVM.save
+
+[host@machine:~]$ ls -l centosVM.save 
+-rw------- 1 root root 328645215 Mar 18 01:35 centosVM.saved
+```
+
+### 2. Restore Guest
+
+* To restore saved vm from the file:
+
+```
+[host@machine:~]$ virsh restore /home/kvmUser/centosVM.save 
+Domain restored from centosVM.save
+
+[host@machine:~]$ sudo virsh list
+ Id    Name                           State
+ ----------------------------------------------------
+  7    centosVM                           running
+```
+
+## 2. virsh Manage Snapshots
 
 ### 1. Create snapshots
 
@@ -442,6 +613,7 @@ Domain snapshot test_vm_snapshot1 created
 
 #### 2. Create snapshots using snapshot-create
 
+* The main problem with **Save Guest** is it will just save RAM not the Disk data. So we use snapshots 
 * A snapshot – of a virtual machine – is a file-based representation of the state of the virtual machine at a given time. 
 * It includes disk data and configuration data of the VM. 
 * With a snapshot you can restore a machine to a previous state.
@@ -450,7 +622,7 @@ Domain snapshot test_vm_snapshot1 created
 [host@machine:~]$ sudo virsh snapshot-create --domain vmName \
 Domain snapshot test_vm_snapshot1 created
 ```
- or
+ <center> or </center>
  
 ```
 [host@machine:~]$ sudo virsh snapshot-create vmName \
@@ -531,48 +703,207 @@ Domain snapshot vm-2 Deleted
   vm-3                 2017-03-18 02:23:29 +0300 running
 ```
 
+## 3. External BackUP and Restore VM 
 
-## clone VM
+### External BackUP VM
 
-* First Shutdown vm
-
-```
-[host@machine:~]$ sudo virsh destroy vmName-1
-Domain vmName destroyed
-```
-
-* 
+* The main problem with **Snapshots** is it is manager by KVM and anything goes wrong with kvm & its operating system we won't be able to restore back the vm's.
+* You can take a External Backup a VM. So that we can share this VM and its data.
 
 ```
-[host@machine:~]$ sudo virt-clone --connect qemu:///system \
---original vmName-1 \
---name vmName-2 \
---file /var/lib/libvirt/images/vmName-1.qcow2  
-
-
-Allocating 'vmName-2.qcow2'       |  10 GB  00:00:06
-
-Clone 'test_clone' created successfully.
+[host@machine:~]$ virsh vol-list poolName
 ```
 
+* List volume for VM
+
 ```
-[host@machine:~]$ sudo virsh dominfo vmName-2
-Id:             -
-Name:           vmName-2
-UUID:           be0621fd-51b5-4d2b-a05c-ce76e59baafa
-OS Type:        hvm
-State:          shut off
-CPU(s):         1
-Max memory:     1048576 KiB
-Used memory:    1048576 KiB
-Persistent:     yes
-Autostart:      disable
-Managed save:   no
-Security model: none
-Security DOI:   0
+[host@machine:~]$ virsh vol-list default
+
+ Name                 Path
+------------------------------------------------------------------
+ vEngine.qcow2        /var/lib/libvirt/images/vEngine.qcow2
+ vNode.qcow2          /var/lib/libvirt/images/vNode.qcow2
 ```
 
-## manage VM vcpus
+* Copy the .qcow2 file to your location
+
+```
+[host@machine:~]$ mkdir -p ~/extBckUp 
+[host@machine:~]$ sudo cp /var/lib/libvirt/images/vNode.qcow2 ~/extBckUp/
+[host@machine:~]$ ls ~/extBckUp/
+vNode.qcow2
+[host@machine:~]$ virsh dumpxml vNode > ~/extBckUp/vNode.xml
+[host@machine:~]$ ls ~/extBckUp/
+vNode.qcow2  vNode.xml
+```
+
+* Backup VM externally using a shell script all will be save in ls ~/allVmBckUpExt/
+ 
+```
+[host@machine:~]$ bash allVmBckUpExt.sh ~/Downloads/hosts.ini chkpt-1 default
+
+ USAGE: bash allVmBckUpExt.sh mosipVm.list 1-keyDistro 
+
+ This script will make BackUp of all vm's present in input file under  ~/allvmBckExt directory
+ Do you want to continue ? (yes | no ) y
+  
+BackUp has been taken successfully all vm's!!!
+```
+
+### Restore VM From External BackUP
+
+* Shutdown all machines 
+
+```
+[host@machine:~]$
+for vm in `sudo virsh list --all | grep "running" |awk '{print $2}'`; do  
+	sudo virsh shutdown $vm
+done
+```
+
+* Check the backup files.
+
+```
+[host@machine:~]$ ls ~/extBckUp/
+vNode.qcow2  vNode.xml
+```
+
+* Check the vms
+
+```
+[host@machine:~]$ virsh list --all
+ Id   Name           State
+-------------------------------
+ -    centos78Base   shut off
+ -    centos7Base    shut off
+ -    centos8Base    shut off
+ -    nseCollectVm   shut off
+ -    vEngine        shut off
+```
+
+* check the path of .qcow2 files
+
+```
+[host@machine:~]$ virsh vol-list default 
+ Name                 Path
+------------------------------------------------------------------
+ vEngine.qcow2        /var/lib/libvirt/images/vEngine.qcow2
+```
+
+* Define Guest VM using .xml file
+
+```
+[host@machine:~]$ virsh define ~/extBckUp/vNode.xml 
+Domain vNode defined from /home/syed/extBckUp/vNode.xml
+
+[host@machine:~]$ virsh list --all
+ Id   Name           State
+-------------------------------
+ -    centos78Base   shut off
+ -    centos7Base    shut off
+ -    centos8Base    shut off
+ -    nseCollectVm   shut off
+ -    vEngine        shut off
+ -    vNode          shut off
+```
+
+* Now attach volume to the create guest/VM
+
+```
+[host@machine:~]$ virsh vol-list --pool default 
+ Name                 Path
+------------------------------------------------------------------
+ centos78Base.qcow2   /var/lib/libvirt/images/centos78Base.qcow2
+ centos7Base.qcow2    /var/lib/libvirt/images/centos7Base.qcow2
+ centos8Base.qcow2    /var/lib/libvirt/images/centos8Base.qcow2
+ nseCollectVm.qcow2   /var/lib/libvirt/images/nseCollectVm.qcow2
+ vEngine.qcow2        /var/lib/libvirt/images/vEngine.qcow2
+```
+* Copy .qcow2 file to your default volume path 
+
+```
+[host@machine:~]$ sudo cp ~/extBckUp/vNode.qcow2 /var/lib/libvirt/images/vNode.qcow2
+```
+* check the files
+
+```
+[host@machine:~]$ sudo ls /var/lib/libvirt/images
+centos78Base.qcow2  centos7Base.qcow2  centos8Base.qcow2  nseCollectVm.qcow2  vEngine.qcow2  vNode.qcow2
+```
+* Now check the vol-list 
+
+```
+[host@machine:~]$ virsh vol-list --pool default 
+ Name                 Path
+------------------------------------------------------------------
+ centos78Base.qcow2   /var/lib/libvirt/images/centos78Base.qcow2
+ centos7Base.qcow2    /var/lib/libvirt/images/centos7Base.qcow2
+ centos8Base.qcow2    /var/lib/libvirt/images/centos8Base.qcow2
+ nseCollectVm.qcow2   /var/lib/libvirt/images/nseCollectVm.qcow2
+ vEngine.qcow2        /var/lib/libvirt/images/vEngine.qcow2
+```
+
+* You have noticed that machine vol path has not added. So restart libvirtd service
+
+```
+[host@machine:~]$ sudo systemctl restart libvirtd
+```
+* Now the vNode path has been added
+
+```
+[host@machine:~]$ virsh vol-list --pool default 
+ Name                 Path
+------------------------------------------------------------------
+ centos78Base.qcow2   /var/lib/libvirt/images/centos78Base.qcow2
+ centos7Base.qcow2    /var/lib/libvirt/images/centos7Base.qcow2
+ centos8Base.qcow2    /var/lib/libvirt/images/centos8Base.qcow2
+ nseCollectVm.qcow2   /var/lib/libvirt/images/nseCollectVm.qcow2
+ vEngine.qcow2        /var/lib/libvirt/images/vEngine.qcow2
+ vNode.qcow2          /var/lib/libvirt/images/vNode.qcow2
+```
+
+* Now Restart is complete. Verify with starting the machine
+
+```
+[host@machine:~]$ virsh start vNode 
+Domain vNode started
+```
+
+* Restore Multiple machines using script 
+
+```
+[host@machine:~]$ cd ~/kvm/code/infra/2-BackUpVMs
+
+[host@machine:~]$ ls
+allVmBckUpExt.sh  allVmRstrExt.sh  allVmSnapshots.sh  reStoreAllVmSnapshots.sh  rmAllVmSnapshots.sh
+
+[host@machine:~]$ bash allVmRstrExt.sh ~/Downloads/hosts.ini chkpt-1 default
+
+ USAGE: bash allVmRstrExt.sh mosipVm.list chkptName kvmPoolName
+
+ This script will restore vm's present in input file from Backup ( i.e under ~/allvmBckExt )  
+ Do you want to continue ? ( yes | no )  y
+
+Successfully Restored All vm's from BackUp !!!
+```
+
+
+
+# CPU Management
+
+* First check total CPU
+
+```
+[host@machine:~]$ virsh nodeinfo
+CPU model:           x86_64 
+CPU(s):              8                 # 8 cpus 
+CPU frequency:       801 MHz
+CPU socket(s):       1
+Core(s) per socket:  4
+Thread(s) per core:  2
+NUMA cell(s):        1
+Memory size:         16289304 KiB
+```
 
 * Execute the below command to set vcpus
 
@@ -602,13 +933,98 @@ Security model: none
 Security DOI:   0
 ```
 
-## Manager VM RAM
+* Manager cpus for vm using virsh edit command.
+
+```
+[host@machine:~]$ virsh edit $VM_ID or vmName
+```
+Change the CPU fields .
+
+![vmRAMmanage.png](../../images/vmCPUManage.png)
+
+## 1. Discover CPU Scheduling Parameters
+
+```
+virsh schedinfo $VM_ID 
+```
+```
+[host@machine:~]$ virsh schedinfo vEngine
+Scheduler      : posix
+cpu_shares     : 0
+vcpu_period    : 0
+vcpu_quota     : 0
+emulator_period: 0
+emulator_quota : 0
+global_period  : 0
+global_quota   : 0
+iothread_period: 0
+iothread_quota : 0
+```
+
+## 2. Permanently Set CPU Shares For Live Running Instance
+
+```
+[host@machine:~]$ 
+virsh schedinfo $VM_ID \
+  --set cpu_shares=[0-262144] \
+  --live \
+  --current \
+  --config
+```
+
+## 3. Get the CPU Pinning Settings for a Guest
+
+```
+[host@machine:~]$ virsh vcpupin vEngine 
+ VCPU   CPU Affinity
+----------------------
+ 0      0-7
+ 1      0-7
+ 2      0-7
+ 3      0-7
+```
+
+## 4. Pin A CPU
+
+* If I wanted to set the cores that a guest can use, I could do the following:
+
+```
+[host@machine:~]$ virsh vcpupin vmName 0 2
+```
+
+* That will set the first vCPU (the one with ID 0) to only run on core ID 2. Thus the output of virsh vcpupin vmName machine changes to:
+
+```
+[host@machine:~]$ virsh vcpupin vmName 
+VCPU: CPU Affinity
+----------------------------------
+   0: 2
+   1: 0-3
+```
+
+**Note: Pinning could be a great way to limit the effect a certain guest has on others, or to give a guest a dedicated core etc.**
+
+# Manager VM RAM
+
+* First check total RAM
+
+```
+[host@machine:~]$ virsh nodeinfo
+CPU model:           x86_64 
+CPU(s):              8                 # 8 cpus 
+CPU frequency:       801 MHz
+CPU socket(s):       1
+Core(s) per socket:  4
+Thread(s) per core:  2
+NUMA cell(s):        1
+Memory size:         16289304 KiB       # Total RAM in KiB
+```
 
 * To adjust the total ram used by the guest operating system, the following commands are used:
 
 ```
-[host@machine:~]$ sudo virsh setmaxmem test 2048 --config
-[host@machine:~]$ sudo virsh setmem test 2048 --config
+[host@machine:~]$ sudo virsh setmaxmem test 6G --config
+[host@machine:~]$ sudo virsh setmem test 6G --config
 [host@machine:~]$ sudo virsh reboot test
 Domain test is being rebooted
 ```
@@ -623,8 +1039,8 @@ OS Type:        hvm
 State:          running
 CPU(s):         2
 CPU time:       70.7s
-Max memory:     2048 KiB
-Used memory:    2048 KiB
+Max memory:     6291456 KiB
+Used memory:    6291456 KiB
 Persistent:     yes
 Autostart:      disable
 Managed save:   no
@@ -632,10 +1048,22 @@ Security model: none
 Security DOI:   0
 ```
 
+* Manager cpus for vm using virsh edit command.
+
+```
+[host@machine:~]$ virsh edit $VM_ID or vmName
+```
+Change the memory and currentMemory fields to be the size you want in KiB.
+
+![vmRAMmanage.png](../../images/vmRAMmanage.png)
 
 #TODO:
 
 ## Mount Virtual Disk
+
+## Networking
+
 # References
 
 1. [computingforgeeks.com](https://computingforgeeks.com/virsh-commands-cheatsheet/)
+1. [blog.programster.org](https://blog.programster.org/kvm-cheatsheet)
