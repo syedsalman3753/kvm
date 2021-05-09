@@ -15,7 +15,12 @@ There are two methods
 * To create new KVM VM using Qcow2 image, run:
 
 ```
-[host@machine ~]$ virt-install --name CentOS_7_Server --memory 2048 --vcpus 1 --disk /home/sk/CentOS_7_Server.qcow2,bus=sata --import --os-variant centos7.0 --network default
+[host@machine ~]$ virt-install --name CentOS_7_Server \
+                  --memory 2048                       \
+                  --vcpus 1                           \
+                  --disk  ~/allVmBckUpExt/1-vmSetup/nseCollectVm-1-vmSetup.qcow2,bus=sata --import \
+                  --os-variant centos7.0              \
+                  --network default                   
 ```
 ![vmImport-1.png](../../../../images/vmImport-1.png)
 
