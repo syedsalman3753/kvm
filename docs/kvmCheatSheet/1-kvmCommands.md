@@ -942,6 +942,7 @@ Change the CPU fields .
 
 ![vmRAMmanage.png](../../images/vmCPUManage.png)
 
+
 ## 1. Discover CPU Scheduling Parameters
 
 ```
@@ -1056,6 +1057,18 @@ Security DOI:   0
 Change the memory and currentMemory fields to be the size you want in KiB.
 
 ![vmRAMmanage.png](../../images/vmRAMmanage.png)
+
+## Increase RAM/CPU from a file consisting of list of vms
+
+* Increase RAM to 16G & cpu to 4
+
+```
+for vm in $(<mosip.list); do virsh shutdown $vm; done
+  
+for vm in $(<mosip.list); do virsh setmaxmem $vm 16G --config; virsh setmem $vm 16G --config; done
+
+for vm in $(<mosip.list); do virsh setvcpus $vm 4 --config --maximum; virsh setvcpus $vm 4 --config; done
+```
 
 #TODO:
 
