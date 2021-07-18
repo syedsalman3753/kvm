@@ -123,7 +123,7 @@ virt-install \
 --network bridge=virbr0 \
 --graphics none \
 --console pty,target_type=serial \
---location  'http://jp.archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/' \
+--location  'http://us.archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/' \
 --extra-args 'console=ttyS0,115200n8 serial'
 
 

@@ -136,7 +136,7 @@ rmSnpshot $vmName
 
 # Remove vm qcow2 image
 echo -n "$(tput setaf 9)    [Remove-qcow2 image] $(tput sgr 0)"
- rmQcow2File $vmName $poolName       # calling rmQcow2File function
+rmQcow2File $vmName $poolName       # calling rmQcow2File function
 
 # undefine vm 
  echo -n "$(tput setaf 9)    [Undefine $vm] $(tput sgr 0)"
