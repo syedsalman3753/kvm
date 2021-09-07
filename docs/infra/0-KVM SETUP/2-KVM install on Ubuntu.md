@@ -89,7 +89,17 @@ kvm                   663552  1 kvm_intel
 ```
 Right now there are no machines are there, therefore its empty.
 
-### Step 6: virt-manager
+### Step 6: Add user to libvirt group 
+
+* Add user to libvirt group. so that non-sudo users can also work with KVM.
+
+```
+[mosipuser@k8Master1 ~]$ sudo usermod -aG libvirt mosipuser
+```
+
+* restart your machine.
+
+### Step 7: virt-manager
 
 virt-manager is a GUI based tool, Which helps to manage kvm machines 
 we also could launch/start it from terminal as well as from GUI.
@@ -98,7 +108,7 @@ we also could launch/start it from terminal as well as from GUI.
 [mosipuser@k8Master1 ~]$ virt-manager
 ```
                  
- ![virt-manager](../../images/virt-manager.png)
+ ![virt-manager](../../../images/virt-manager.png)
  
  
 # References
