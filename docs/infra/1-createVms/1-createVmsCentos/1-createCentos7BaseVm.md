@@ -18,7 +18,7 @@
 ## 2. Goto infra directory
 
 ```
-[host@machine ~]$ cd ~/kvm/code/infra/1-createVmCentos/
+[host@machine ~]$ cd ./kvm/code/infra/1-createVms/createVmCentos/1-createVms
 ```
 
 ## 3. Check createVmCentos7.sh file
@@ -26,7 +26,8 @@
 * This script will help you to create new centos7 OS virtual machine in KVM
 
 ```
-[host@machine 1-createVmCentos]$ ls ~/kvm/code/infra/1-createVmCentos
+
+[host@machine 1-createVms]$ ls
 createVmCentos7.sh createVmCentos8.sh
 ```
 
