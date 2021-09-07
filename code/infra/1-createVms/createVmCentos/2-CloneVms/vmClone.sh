@@ -62,7 +62,7 @@ echo -n "$(tput setaf 9) [shutdown-Machine] $(tput sgr 0)"
 vmShutdown $srcVm          		    # calling vmShutdown function 
 chkVmStatus $srcVm        	 		# calling vmStatus function
 
-sleep 10
+sleep 5
 
 echo -n "$(tput setaf 9) [clone-Machine] $(tput sgr 0)"
 echo -e "\n Clone $destVm from $srcVm"
@@ -70,8 +70,10 @@ sudo virt-clone --connect qemu:///system  --original $srcVm  --name $destVm  --a
 	
 echo Correct the host name
 sudo virt-customize -d $destVm --hostname $destVm
-		
-echo Cleanup logs etc
+
+echo Perform Cleanup and Uniqueness tasks, openssh reconfig, hostname
+sudo virt-customize -d $destVm --run-command "sudo truncate -s 0 /etc/machine-id"
+sudo virt-customize -d $destVm --run-command "sudo rm -rf '/var/lib/dbus/machine-id' "	
 sudo virt-sysprep -d $destVm \
 		--enable abrt-data,backup-files,bash-history,crash-data,cron-spool,dovecot-data,logfiles,passwd-backups,puppet-data-log,sssd-db-log,tmp-files
 	
