@@ -990,7 +990,64 @@ Release:	20.04
 Codename:	focal
 ```
 
+## ALLOW ROOT SSH LOGIN 
+
+* login as non-root user on ubuntu VM's
+* open sshd_config file, and add this "PermitRootLogin yes" in a new line
+
+```
+mosipuser@ubuntu20Base:~$ sudo vim /etc/ssh/sshd_config
+....
+....
+PermitRootLogin yes
+...
+...
+```
+
+* restart sshd service
+
+```
+mosipuser@ubuntu20Base:~$ sudo systemctl restart sshd
+```
+
+* Now try to login as root via ssh
+
+```
+techno-384@techno384-Latitude-3410:~/Documents/GIT/kvm/code/infra/1-createVms/createVmUbuntu/1-createVms$ ssh root@ubuntu20Base 
+root@ubuntu20base's password: 
+Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-84-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+root@ubuntu20Base:~# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:6d:2c:93 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.122.4/24 brd 192.168.122.255 scope global dynamic enp1s0
+       valid_lft 3391sec preferred_lft 3391sec
+    inet6 fe80::5054:ff:fe6d:2c93/64 scope link 
+       valid_lft forever preferred_lft forever
+root@ubuntu20Base:~# exit
+logout
+Connection to ubuntu20base closed.
+```
+
 # Reference
 
 1. [askubuntu.com](https://askubuntu.com/questions/1070500/why-doesnt-osinfo-query-os-detect-ubuntu-18-04)
 *  [jp.archive.ubuntu.com](http://jp.archive.ubuntu.com/ubuntu/dists/groovy/main/installer-amd64/)
+*  [blog.eldernode.com](https://blog.eldernode.com/enable-root-login-via-ssh-in-ubuntu-20-04/)
