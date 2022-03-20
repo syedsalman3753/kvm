@@ -4,12 +4,12 @@
 
 ## Create a windows virtual machine using virt-manager UI
 
-1. Create new virtual machine.
+1. Create new virtual machine. <br>
    ![windows-vm-create-1.png](../../../../images/windows-vm-create-1.png)
 2. select `windows` ISO file & OS types. <br>
    ![windows-vm-create-2.png](../../../../images/windows-vm-create-2.png)
-3. click on `Browse Local` to select ISO file from your filesystem.
-   ![windows-vm-create-3.png](../../../../images/windows-vm-create-3.png)
+3. click on `Browse Local` to select ISO file from your filesystem. <br>
+   ![windows-vm-create-3.png](../../../../images/windows-vm-create-3.png) <br>
    ![windows-vm-create-4.png](../../../../images/windows-vm-create-4.png)
 4. After selecting ISO file & OS type. click on `Forward` to continue. <br>
    ![windows-vm-create-5.png](../../../../images/windows-vm-create-5.png)
@@ -17,9 +17,9 @@
    ![windows-vm-create-6.png](../../../../images/windows-vm-create-6.png)
 6. set VM storage  <br>
    ![windows-vm-create-7.png](../../../../images/windows-vm-create-7.png)
-7. Provide VM name, select KVM virtual network `NAT` And click on `Finish` to create VM.
+7. Provide VM name, select KVM virtual network `NAT` And click on `Finish` to create VM. <br>
    ![windows-vm-create-8.png](../../../../images/windows-vm-create-8.png)
-8. Select `Language` & `time` format & click on `Next` to continue.
+8. Select `Language` & `time` format & click on `Next` to continue.<br>
    ![windows-vm-create-9.png](../../../../images/windows-vm-create-9.png)
 9. Click on `Install Now` to install `windows`.
    ![windows-vm-create-10.png](../../../../images/windows-vm-create-10.png)
@@ -34,6 +34,7 @@
 14. Select hard disk & click on `Next`.
     ![windows-vm-create-15.png](../../../../images/windows-vm-create-15.png)
 15. Wait till installation completes.
+    ![windows-vm-create-28.png](../../../../images/windows-vm-create-28.png) <br>
     ![windows-vm-create-16.png](../../../../images/windows-vm-create-16.png)
 16. Select `India` region & click on `Next`
     ![windows-vm-create-17.png](../../../../images/windows-vm-create-17.png)
@@ -51,9 +52,9 @@
     ![windows-vm-create-23.png](../../../../images/windows-vm-create-23.png)
 23. Setup according to your requirement.
 24. Wait till setup completes.
-    ![windows-vm-create-24.png](../../../../images/windows-vm-create-24.png)
-    ![windows-vm-create-25.png](../../../../images/windows-vm-create-25.png)
-25. Login with username & pin which you have given while creating VM
+    ![windows-vm-create-24.png](../../../../images/windows-vm-create-24.png) <br>
+    ![windows-vm-create-25.png](../../../../images/windows-vm-create-25.png) <br>
+25. Login with username & pin which you have given while creating VM <br>
     ![windows-vm-create-26.png](../../../../images/windows-vm-create-26.png)
 26. You can even check IP of VM as shown below
     ![windows-vm-create-27.png](../../../../images/windows-vm-create-27.png)
