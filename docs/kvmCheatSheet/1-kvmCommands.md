@@ -940,7 +940,7 @@ Security DOI:   0
 ```
 Change the CPU fields .
 
-![vmRAMmanage.png](../../images/vmCPUManage.png)
+![vmRAMmanage.png](../../_images/vmCPUManage.png)
 
 
 ## 1. Discover CPU Scheduling Parameters
@@ -1056,7 +1056,7 @@ Security DOI:   0
 ```
 Change the memory and currentMemory fields to be the size you want in KiB.
 
-![vmRAMmanage.png](../../images/vmRAMmanage.png)
+![vmRAMmanage.png](../../_images/vmRAMmanage.png)
 
 ## Increase RAM/CPU from a file consisting of list of vms
 

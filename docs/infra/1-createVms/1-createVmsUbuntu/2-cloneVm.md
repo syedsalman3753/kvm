@@ -249,7 +249,7 @@ Save the file
 ```
 [mosipuser@ubuntu20:~]$ sudo do-release-upgrade
 ```
-![vmCloneUbuntu-1.png](../../../../images/vmCloneUbuntu-1.png)
+![vmCloneUbuntu-1.png](../../../../_images/vmCloneUbuntu-1.png)
 
 * Package configuration (Select YES)
 
