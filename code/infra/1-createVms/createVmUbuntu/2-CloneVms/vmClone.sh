@@ -41,15 +41,18 @@ chkVmStatus() {
 
 
 # The script starts from Here
+echo -e "$(tput setaf 2) \n USAGE: bash vmClone.sh sourceVmName destinationVmName \n $(tput sgr0)";
+echo "$(tput setaf 4) This script will create a new Ubuntu VM $(tput sgr0)";
+
 if [ "$#" -ne 2 ]; then
-	echo " Destination and Source VM names (exactly TWO params, in that order) must be provided"
+	echo "$(tput setaf 1) Destination and Source VM names (exactly TWO params, in that order) must be provided; $(tput sgr0)"
 	exit 1
 fi
 
-destVm=$1
-srcVm=$2
+srcVm=$1
+destVm=$2
 
-read -p " Are you sure you want to clone $destVm from $srcVm? " -n 1 -r
+read -p "$(tput setaf 3) Are you sure you want to clone $destVm from $srcVm? $(tput sgr0)" -n 1 -r
 echo    # (optional) move to a new line
 
 if ! [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -62,7 +65,7 @@ echo -n "$(tput setaf 9) [shutdown-Machine] $(tput sgr 0)"
 vmShutdown $srcVm          		    # calling vmShutdown function 
 chkVmStatus $srcVm        	 		# calling vmStatus function
 
-sleep 10
+sleep 5
 
 echo -n "$(tput setaf 9) [clone-Machine] $(tput sgr 0)"
 echo -e "\n Clone $destVm from $srcVm"
@@ -73,7 +76,7 @@ sudo virt-customize -d $destVm --hostname $destVm
 		
 echo Perform Cleanup and Uniqueness tasks, openssh reconfig, hostname
 sudo virt-customize -d $destVm --run-command "sudo truncate -s 0 /etc/machine-id"
-sudo virt-customize -d $destVm --run-command "sudo rm -rf '/var/lib/dbus/machine-id' 
+sudo virt-customize -d $destVm --run-command "sudo rm -rf '/var/lib/dbus/machine-id'" 
 sudo virt-sysprep -d $destVm \
 		--enable abrt-data,backup-files,bash-history,crash-data,cron-spool,dovecot-data,logfiles,passwd-backups,puppet-data-log,sssd-db-log,tmp-files
 	
