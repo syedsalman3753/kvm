@@ -72,7 +72,7 @@ createVmUbuntu20.10.sh  createVmUbuntu18.04.sh
 * Run createVmUbuntu20.10.sh script to install a new VM in your local machine
 
 ```
-[host@machine 1-createVms]$ bash createVmUbuntu20.04.sh ubuntu20Base 3072 2 16
+[host@machine 1-createVms]$ bash createVmUbuntu20.04.sh ubuntu20Base 4096 3 32
  
  USAGE: bash createUbuntu20.10.sh vmName vmRAM(MiB) vCPU vmDiskSize(GiB) 
 
@@ -226,7 +226,7 @@ createVmUbuntu20.10.sh  createVmUbuntu18.04.sh
 
 ## 8. Choose a mirror of the Ubuntu archive
 
-* Select "India" & press Enter
+* Select "enter information manually" & press Enter
 
 ```
   ┌──────────────┤ [!] Choose a mirror of the Ubuntu archive ├──────────────┐
@@ -237,41 +237,73 @@ createVmUbuntu20.10.sh  createVmUbuntu18.04.sh
   │                                                                         │
   │ Ubuntu archive mirror country:                                          │
   │                                                                         │
-  │             Guyana                                                      │
-  │             Haiti                                         ▒             │
-  │             Heard Island and McDonald Islands             ▒             │
-  │             Holy See (Vatican City State)                               │
-  │             Honduras                                      ▒             │
-  │             Hong Kong                                     ▒             │
-  │             Hungary                                       ▒             │
-  │             Iceland                                       ▒             │
-  │             India         # Select India                                │
+  │             enter information manually     ### select                   │
+  │             Afghanistan                                                 │
+  │             Albania                                       ▒             │
+  │             Algeria                                       ▒             │
+  │             American Samoa                                ▒             │
+  │             Andorra                                       ▒             │
+  │             Angola                                        ▒             │
+  │             Anguilla                                      ▒             │
+  │             Antarctica                                                  │
   │                                                                         │
   │     <Go Back>                                                           │
   │                                                                         │
   └─────────────────────────────────────────────────────────────────────────┘
+<Tab> moves; <Space> selects; <Enter> activates buttons
 ```
-
+* Choose mirror server from url `http://mirrors.ubuntu.com/mirrors.txt`
+  ```
+  host@machine $ curl mirrors.ubuntu.com/mirrors.txt
+  
+  https://mirrors.nxtgen.com/ubuntu-mirror/ubuntu/
+  http://ftp.iitm.ac.in/ubuntu/
+  http://ubuntu.hbcse.tifr.res.in/ubuntu/
+  https://repo.extreme-ix.org/ubuntu/
+  https://in.mirror.coganng.com/ubuntu/
+  http://mirrors.piconets.webwerks.in/ubuntu-mirror/ubuntu/
+  http://repos.del.extreme-ix.org/ubuntu/
+  https://in.mirror.coganng.com/ubuntu-ports/
+  http://archive.ubuntu.com/ubuntu/         ## selected this mirror
+  ```
 * Check if mirror is "in.archive.ubuntu.com" & Press enter
 
 ```
+     ┌───────────┤ [!!] Choose a mirror of the Ubuntu archive ├───────────┐
+     │                                                                    │
+     │ Please enter the hostname of the mirror from which Ubuntu will be  │
+     │ downloaded.                                                        │
+     │                                                                    │
+     │ An alternate port can be specified using the standard              │
+     │ [hostname]:[port] format.                                          │
+     │                                                                    │
+     │ Ubuntu archive mirror hostname:                                    │
+     │                                                                    │
+     │ archive.ubuntu.com________________________________________________ │
+     │                                                                    │
+     │     <Go Back>                                       <Continue>     │
+     │                                                        (Select)    │
+     └────────────────────────────────────────────────────────────────────┘
 
-  ┌──────────────┤ [!] Choose a mirror of the Ubuntu archive ├──────────────┐
-  │                                                                         │
-  │ Please select an Ubuntu archive mirror. You should use a mirror in      │
-  │ your country or region if you do not know which mirror has the best     │
-  │ Internet connection to you.                                             │
-  │                                                                         │
-  │ Usually, <your country code>.archive.ubuntu.com is a good choice.       │
-  │                                                                         │
-  │ Ubuntu archive mirror:                                                  │
-  │                                                                         │
-  │                        in.archive.ubuntu.com                            │
-  │                                                                         │
-  │     <Go Back>                                                           │
-  │                                                                         │
-  └─────────────────────────────────────────────────────────────────────────┘
+<Tab> moves; <Space> selects; <Enter> activates buttons
 ```
+
+* Select url path `/ubuntu` from mirror url `http://archive.ubuntu.com/ubuntu/`.
+  ```
+   ┌────────────┤ [!!] Choose a mirror of the Ubuntu archive ├─────────────┐
+   │                                                                       │
+   │ Please enter the directory in which the mirror of the Ubuntu archive  │
+   │ is located.                                                           │
+   │                                                                       │
+   │ Ubuntu archive mirror directory:                                      │
+   │                                                                       │
+   │ /ubuntu/_____________________________________________________________ │
+   │                                                                       │
+   │     <Go Back>                                          <Continue>     │
+   │                                                         (Select)      │
+   └───────────────────────────────────────────────────────────────────────┘
+  <Tab> moves; <Space> selects; <Enter> activates buttons
+  ```
 
 * Leave it blank & press Enter
 
@@ -289,14 +321,24 @@ createVmUbuntu20.10.sh  createVmUbuntu18.04.sh
     │ ___________________________________________________________________ │
     │                                                                     │
     │     <Go Back>                                        <Continue>     │
-    │                                                                     │
+    │                                                       (Select)      │
     └─────────────────────────────────────────────────────────────────────┘
 ```
+
 Please wait till download is complete.
+```
+  ┌────────────────────┤ Loading additional components ├────────────────────┐
+  │                                                                         │
+  │                                   10%                                   │
+  │|_|_|_|_|_|_|_\_|______________________________________________________  │
+  │ Retrieving firewire-core-modules-5.4.0-26-generic-di                    │
+  │                                                                         │
+  └─────────────────────────────────────────────────────────────────────────┘
+```
 
 ## 9. Set up users and passwords
 
-* Provide "mosipuser" & password "mosipuser"
+* Provide "mosipuser" & password "mosipuser".
 
 ```
 
@@ -438,13 +480,13 @@ Please wait till download is complete.
   │                                                                         │
   │ The minimum size of the selected partitioning recipe is 1.9 GB (or      │
   │ 11%); please note that the packages you choose to install may require   │
-  │ more space than this. The maximum available size is 16.6 GB.            │
+  │ more space than this. The maximum available size is 33.8 GB.            │
   │                                                                         │
   │ Hint: "max" can be used as a shortcut to specify the maximum size, or   │
   │ enter a percentage (e.g. "20%") to use that percentage of the maximum   │
   │ size.                                                                   │
   │                                                                         │
-  │ 16.6 GB______________________________________________________________   │
+  │ 33.8 GB______________________________________________________________   │
   │                                                                         │
   │     <Go Back>                                            <Continue>     │
   │                                                                         │
@@ -932,7 +974,7 @@ Domain ubuntu20Base is being shutdown
 [   2.9] Finishing off
 ```
 
-## 22. Make centos7Base machine passwordLess SSH access
+## 22. Make ubuntu20Base machine passwordLess SSH access
 
 * On host machine run below command to make password less ssh login
 
@@ -1046,6 +1088,9 @@ logout
 Connection to ubuntu20base closed.
 ```
 
+## update ubuntu20Base epackages
+* run `sudo apt-get update --fix-missing -y` to update packages.
+* 
 # Reference
 
 1. [askubuntu.com](https://askubuntu.com/questions/1070500/why-doesnt-osinfo-query-os-detect-ubuntu-18-04)

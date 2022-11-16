@@ -118,7 +118,6 @@ virt-install \
 --ram $vmRAM \
 --disk path=/var/lib/libvirt/images/"$vmName".qcow2,size="$vmDiskSize" \
 --vcpus "$vCPU" \
---os-type linux \
 --os-variant ubuntu18.04 \
 --network bridge=virbr0 \
 --graphics none \
