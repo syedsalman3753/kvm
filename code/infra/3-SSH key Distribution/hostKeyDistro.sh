@@ -14,7 +14,7 @@ userCh(){
   esac
 }
 
-#This function is to prompt wheather sshpass is installed or not!!!!
+#This function is to prompt whether sshpass is installed or not!!!!
 chksshPass(){
   chkSSHpass=$(sshpass 2>&1)
   count=$(echo $chkSSHpass | grep "password" | wc -l)
